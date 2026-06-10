@@ -14,7 +14,180 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      project_tags: {
+        Row: {
+          project_id: string
+          tag_id: string
+        }
+        Insert: {
+          project_id: string
+          tag_id: string
+        }
+        Update: {
+          project_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tags_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          body_en: string | null
+          body_it: string | null
+          cover_url: string | null
+          created_at: string
+          id: string
+          link_url: string | null
+          sort_order: number
+          summary_en: string | null
+          summary_it: string | null
+          title_en: string
+          title_it: string
+          year: number
+        }
+        Insert: {
+          body_en?: string | null
+          body_it?: string | null
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          sort_order?: number
+          summary_en?: string | null
+          summary_it?: string | null
+          title_en: string
+          title_it: string
+          year: number
+        }
+        Update: {
+          body_en?: string | null
+          body_it?: string | null
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          link_url?: string | null
+          sort_order?: number
+          summary_en?: string | null
+          summary_it?: string | null
+          title_en?: string
+          title_it?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      publication_tags: {
+        Row: {
+          publication_id: string
+          tag_id: string
+        }
+        Insert: {
+          publication_id: string
+          tag_id: string
+        }
+        Update: {
+          publication_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "publication_tags_publication_id_fkey"
+            columns: ["publication_id"]
+            isOneToOne: false
+            referencedRelation: "publications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "publication_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      publications: {
+        Row: {
+          abstract_en: string | null
+          abstract_it: string | null
+          authors: string
+          created_at: string
+          doi: string | null
+          id: string
+          pdf_url: string | null
+          sort_order: number
+          title_en: string
+          title_it: string
+          venue: string | null
+          year: number
+        }
+        Insert: {
+          abstract_en?: string | null
+          abstract_it?: string | null
+          authors: string
+          created_at?: string
+          doi?: string | null
+          id?: string
+          pdf_url?: string | null
+          sort_order?: number
+          title_en: string
+          title_it: string
+          venue?: string | null
+          year: number
+        }
+        Update: {
+          abstract_en?: string | null
+          abstract_it?: string | null
+          authors?: string
+          created_at?: string
+          doi?: string | null
+          id?: string
+          pdf_url?: string | null
+          sort_order?: number
+          title_en?: string
+          title_it?: string
+          venue?: string | null
+          year?: number
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          label_en: string
+          label_it: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label_en: string
+          label_it: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label_en?: string
+          label_it?: string
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
