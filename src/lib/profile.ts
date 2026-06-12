@@ -39,7 +39,7 @@ export const timeline = [
     year: "2026-2027",
     institution_en: "MSc Data Science and AI",
     institution_it: "Laurea magistrale in Data Science e AI",
-    place: "Politecnico di Torino, Italy",
+    place: "Newcastle University, UK",
     body_en: "Second year of the MSc, focusing on machine learning, statistical inference, and explainability.",
     body_it: "Secondo anno della magistrale, con focus su machine learning, inferenza statistica ed explainability.",
   },
