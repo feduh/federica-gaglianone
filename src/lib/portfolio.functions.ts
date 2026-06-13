@@ -16,7 +16,10 @@ export const getTags = createServerFn({ method: "GET" }).handler(async () => {
     .from("tags")
     .select("id, slug, label_en, label_it")
     .order("label_en", { ascending: true });
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("[getTags]", error);
+    throw new Error("Failed to load data. Please try again later.");
+  }
   return (data ?? []) as Tag[];
 });
 
@@ -30,7 +33,10 @@ export const getPublications = createServerFn({ method: "GET" }).handler(
       )
       .order("sort_order", { ascending: true })
       .order("year", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error("[getPublications]", error);
+      throw new Error("Failed to load data. Please try again later.");
+    }
     return (data ?? []).map((row: any) => ({
       ...row,
       tags: (row.publication_tags ?? [])
@@ -50,7 +56,10 @@ export const getProjects = createServerFn({ method: "GET" }).handler(
       )
       .order("sort_order", { ascending: true })
       .order("year", { ascending: false });
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error("[getProjects]", error);
+      throw new Error("Failed to load data. Please try again later.");
+    }
     return (data ?? []).map((row: any) => ({
       ...row,
       tags: (row.project_tags ?? [])
