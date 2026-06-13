@@ -59,9 +59,9 @@ export const Route = createFileRoute("/")({
     ]);
   },
   component: HomePage,
-  errorComponent: ({ error }) => (
+  errorComponent: () => (
     <div className="min-h-screen flex items-center justify-center p-8">
-      <p className="font-pixel text-destructive">ERROR: {error.message}</p>
+      <p className="font-pixel text-destructive">ERROR: Something went wrong. Please try again later.</p>
     </div>
   ),
   notFoundComponent: () => (
