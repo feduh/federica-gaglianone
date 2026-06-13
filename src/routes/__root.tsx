@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Federica Gaglianone — Aspiring Researcher" },
+      { name: "description", content: "Still Under Construction" },
+      { property: "og:description", content: "Still Under Construction" },
+      { name: "twitter:description", content: "Still Under Construction" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/3fefb55c-8683-491f-804b-80052b6ab4eb" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/3fefb55c-8683-491f-804b-80052b6ab4eb" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
