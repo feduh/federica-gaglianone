@@ -18,9 +18,10 @@ export function IntroAsymmetric() {
 
       {/* Giant name — sfora */}
       <h1 className="font-display font-light text-foreground select-none px-4 md:px-8" style={{ fontSize: "clamp(4rem, 18vw, 16rem)" }}>
-        <span className="block leading-[0.85]">{profile.name.split(" ")[0] || profile.name}</span>
+        <span className="sr-only">{profile.name} — {role}</span>
+        <span aria-hidden="true" className="block leading-[0.85]">{profile.name.split(" ")[0] || profile.name}</span>
         {profile.name.split(" ").slice(1).join(" ") && (
-          <span className="block leading-[0.85] italic font-normal -mt-2 md:-mt-6 text-accent">
+          <span aria-hidden="true" className="block leading-[0.85] italic font-normal -mt-2 md:-mt-6 text-accent">
             {profile.name.split(" ").slice(1).join(" ")}
           </span>
         )}

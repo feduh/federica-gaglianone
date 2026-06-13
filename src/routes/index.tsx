@@ -27,6 +27,28 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Timeline, publications, and projects of an aspiring researcher.",
       },
+      { property: "og:url", content: "https://federica-gaglianone.lovable.app/" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://federica-gaglianone.lovable.app/" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: profile.name,
+          jobTitle: profile.role_en,
+          email: `mailto:${profile.email}`,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Turin",
+            addressCountry: "IT",
+          },
+          url: "https://federica-gaglianone.lovable.app/",
+        }),
+      },
     ],
   }),
   loader: async ({ context }) => {
