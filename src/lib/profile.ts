@@ -7,7 +7,7 @@ export const profile = {
   role_it: "Aspirante Ricercatrice",
   city_en: "Turin, Italy",
   city_it: "Torino, Italia",
-  email: "you@example.com",
+  email: "federica.gaglianone@proton.me",
   socials: [
     { label: "Scholar", href: "#" },
     { label: "GitHub", href: "#" },
