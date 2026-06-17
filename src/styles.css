@@ -47,49 +47,24 @@
 :root {
   --radius: 0;
 
-  /* Ivory + ink */
+  /* Dark-only palette — ink background, ivory ink, indigo→lavender accent */
   --ivory: oklch(0.953 0.012 85);
-  --ink: oklch(0.16 0.01 80);
-  --accent-hot: oklch(0.66 0.24 30);
-
-  --background: var(--ivory);
-  --foreground: var(--ink);
-  --card: oklch(0.97 0.01 85);
-  --card-foreground: var(--ink);
-  --popover: var(--ivory);
-  --popover-foreground: var(--ink);
-  --primary: var(--ink);
-  --primary-foreground: var(--ivory);
-  --secondary: oklch(0.92 0.012 85);
-  --secondary-foreground: var(--ink);
-  --muted: oklch(0.92 0.012 85);
-  --muted-foreground: oklch(0.45 0.01 80);
-  --accent: var(--accent-hot);
-  --accent-foreground: var(--ivory);
-  --destructive: oklch(0.55 0.22 27);
-  --destructive-foreground: var(--ivory);
-  --border: oklch(0.16 0.01 80 / 0.18);
-  --input: oklch(0.16 0.01 80 / 0.2);
-  --ring: var(--accent-hot);
-}
-
-.dark {
-  --ivory: oklch(0.953 0.012 85);
-  --ink: oklch(0.12 0.005 80);
-  --accent-hot: oklch(0.72 0.22 35);
+  --ink: oklch(0.12 0.005 280);
+  --accent-hot: oklch(0.74 0.16 295); /* lavender ~ #a78bfa */
+  --accent-deep: oklch(0.58 0.22 280); /* indigo ~ #6366f1 */
 
   --background: var(--ink);
   --foreground: var(--ivory);
-  --card: oklch(0.18 0.005 80);
+  --card: oklch(0.18 0.01 280);
   --card-foreground: var(--ivory);
   --popover: var(--ink);
   --popover-foreground: var(--ivory);
   --primary: var(--ivory);
   --primary-foreground: var(--ink);
-  --secondary: oklch(0.22 0.005 80);
+  --secondary: oklch(0.22 0.01 280);
   --secondary-foreground: var(--ivory);
-  --muted: oklch(0.22 0.005 80);
-  --muted-foreground: oklch(0.68 0.01 85);
+  --muted: oklch(0.22 0.01 280);
+  --muted-foreground: oklch(0.68 0.02 285);
   --accent: var(--accent-hot);
   --accent-foreground: var(--ink);
   --destructive: oklch(0.66 0.22 27);
@@ -98,6 +73,7 @@
   --input: oklch(0.953 0.012 85 / 0.2);
   --ring: var(--accent-hot);
 }
+
 
 @layer base {
   * {
