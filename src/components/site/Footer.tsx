@@ -10,8 +10,8 @@ export function Footer() {
         <a
           href={`mailto:${profile.email}`}
           data-cursor="link"
-          className="font-display block leading-[0.9] hover:text-accent transition-colors break-all"
-          style={{ fontSize: "clamp(2.5rem, 10vw, 9rem)" }}
+          className="font-display block leading-[0.9] hover:text-accent transition-colors whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
+          style={{ fontSize: `clamp(1.25rem, ${Math.floor(170 / profile.email.length * 10) / 10}vw, 4rem)` }}
         >
           {profile.email}
         </a>
