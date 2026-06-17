@@ -1,4 +1,3 @@
-import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { useLang } from "@/lib/i18n";
 
@@ -33,7 +32,6 @@ export function TopBar() {
         </nav>
         <div className="flex items-center gap-2 pointer-events-auto">
           <LanguageToggle />
-          <ThemeToggle />
         </div>
       </div>
     </header>
