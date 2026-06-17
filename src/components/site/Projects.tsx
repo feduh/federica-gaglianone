@@ -23,7 +23,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
   return (
     <section id="projects" className="border-t-2 border-foreground py-24 md:py-32">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
-        <h2 className="font-display text-5xl md:text-7xl mb-12">{t("projectsTitle")}</h2>
+        <h2 className="font-display text-5xl md:text-7xl mb-12 text-accent">{t("projectsTitle")}</h2>
         <TagFilter
           tags={usedTags}
           active={active}
