@@ -11,7 +11,7 @@ export function Timeline() {
     <section id="timeline" className="border-t-2 border-foreground py-24 md:py-32">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
-          <h2 className="font-display text-5xl md:text-7xl">{t("timelineTitle")}</h2>
+          <h2 className="font-display text-5xl md:text-7xl text-accent">{t("timelineTitle")}</h2>
           <span className="font-pixel text-sm text-muted-foreground">→ {t("timelineHint")}</span>
         </div>
 
