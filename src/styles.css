@@ -50,8 +50,8 @@
   /* Dark-only palette — ink background, ivory ink, indigo→lavender accent */
   --ivory: oklch(0.953 0.012 85);
   --ink: oklch(0.12 0.005 280);
-  --accent-hot: oklch(0.74 0.16 295); /* lavender ~ #a78bfa */
-  --accent-deep: oklch(0.58 0.22 280); /* indigo ~ #6366f1 */
+  --accent-hot: oklch(0.48 0.27 278); /* indigo/viola ~ #502ee8 */
+  --accent-deep: oklch(0.40 0.26 278);
 
   --background: var(--ink);
   --foreground: var(--ivory);
