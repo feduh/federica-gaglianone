@@ -1,4 +1,3 @@
-import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { useLang } from "@/lib/i18n";
 
