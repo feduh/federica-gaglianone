@@ -66,9 +66,18 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       ))}
                     </div>
                   </div>
-                  <h3 className="font-display text-4xl md:text-6xl leading-[0.95] mt-6">
-                    {title}
-                  </h3>
+                  <div className="flex items-center gap-4 mt-6">
+                    {p.cover_url && (
+                      <img
+                        src={p.cover_url}
+                        alt=""
+                        className="w-14 h-14 md:w-20 md:h-20 object-contain border-2 border-foreground bg-background shrink-0"
+                      />
+                    )}
+                    <h3 className="font-display text-4xl md:text-6xl leading-[0.95] min-w-0 break-words">
+                      {title}
+                    </h3>
+                  </div>
                   {summary && (
                     <p className="font-body text-base md:text-lg mt-4 leading-relaxed text-muted-foreground">
                       {summary}
