@@ -71,7 +71,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       <img
                         src={p.cover_url}
                         alt=""
-                        className="w-14 h-14 md:w-20 md:h-20 object-contain border-2 border-foreground bg-background shrink-0"
+                        className="w-14 h-14 md:w-20 md:h-20 object-contain shrink-0"
                       />
                     )}
                     <h3 className="font-display text-4xl md:text-6xl leading-[0.95] min-w-0 break-words">
