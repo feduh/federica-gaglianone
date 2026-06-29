@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import { useLang } from "@/lib/i18n";
 import type { Project, Tag } from "@/lib/portfolio-types";
 import { TagFilter } from "./TagFilter";
@@ -20,10 +21,76 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
     return tags.filter((t) => slugs.has(t.slug));
   }, [items, tags]);
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    containScroll: "trimSnaps",
+    dragFree: false,
+    skipSnaps: false,
+  });
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => {
+      setCanPrev(emblaApi.canScrollPrev());
+      setCanNext(emblaApi.canScrollNext());
+    };
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.reInit();
+  }, [emblaApi, filtered.length, open]);
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scrollPrev();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scrollNext();
+    }
+  };
+
   return (
     <section id="projects" className="border-t-2 border-foreground py-24 md:py-32">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
-        <h2 className="font-display text-5xl md:text-7xl mb-12 text-accent">{t("projectsTitle")}</h2>
+        <div className="flex items-end justify-between gap-6 mb-12 flex-wrap">
+          <h2 className="font-display text-5xl md:text-7xl text-accent">{t("projectsTitle")}</h2>
+          {filtered.length > 0 && (
+            <div className="flex gap-2">
+              <button
+                data-cursor="link"
+                aria-label="Previous project"
+                onClick={scrollPrev}
+                disabled={!canPrev}
+                className="font-pixel text-sm border-2 border-foreground px-3 py-2 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                ← PREV
+              </button>
+              <button
+                data-cursor="link"
+                aria-label="Next project"
+                onClick={scrollNext}
+                disabled={!canNext}
+                className="font-pixel text-sm border-2 border-foreground px-3 py-2 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                NEXT →
+              </button>
+            </div>
+          )}
+        </div>
         <TagFilter
           tags={usedTags}
           active={active}
@@ -40,79 +107,79 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
           <p className="font-pixel text-muted-foreground py-12">{t("emptyResults")}</p>
         ) : (
           <div
-            className={
-              filtered.length > 2
-                ? "flex overflow-x-auto snap-x snap-mandatory items-start gap-4 border-2 border-foreground p-2 -mx-2 md:mx-0"
-                : "grid grid-cols-1 md:grid-cols-2 items-start gap-4"
-            }
+            ref={emblaRef}
+            tabIndex={0}
+            role="region"
+            aria-label="Projects carousel"
+            onKeyDown={onKeyDown}
+            className="overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            {filtered.map((p, idx) => {
-              const isOpen = open === p.id;
-              const title = lang === "en" ? p.title_en : p.title_it;
-              const summary = lang === "en" ? p.summary_en : p.summary_it;
-              const body = lang === "en" ? p.body_en : p.body_it;
-              const isCarousel = filtered.length > 2;
-              return (
-                <article
-                  key={p.id}
-                  className={`bg-background border-2 border-foreground p-6 md:p-10 flex flex-col self-start ${
-                    isCarousel ? "snap-start shrink-0 w-[85%] md:w-[48%]" : ""
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="font-pixel text-xs text-muted-foreground">
-                      № {String(idx + 1).padStart(2, "0")} / {p.year}
-                    </span>
-                    <div className="flex flex-wrap gap-1 justify-end">
-                      {p.tags.map((tg) => (
-                        <span
-                          key={tg.id}
-                          className="font-pixel text-[11px] border border-foreground px-1.5 py-0.5"
-                        >
-                          # {lang === "en" ? tg.label_en : tg.label_it}
-                        </span>
-                      ))}
+            <div className="flex items-start gap-4">
+              {filtered.map((p, idx) => {
+                const isOpen = open === p.id;
+                const title = lang === "en" ? p.title_en : p.title_it;
+                const summary = lang === "en" ? p.summary_en : p.summary_it;
+                const body = lang === "en" ? p.body_en : p.body_it;
+                return (
+                  <article
+                    key={p.id}
+                    className="bg-background border-2 border-foreground p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)]"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="font-pixel text-xs text-muted-foreground">
+                        № {String(idx + 1).padStart(2, "0")} / {p.year}
+                      </span>
+                      <div className="flex flex-wrap gap-1 justify-end">
+                        {p.tags.map((tg) => (
+                          <span
+                            key={tg.id}
+                            className="font-pixel text-[11px] border border-foreground px-1.5 py-0.5"
+                          >
+                            # {lang === "en" ? tg.label_en : tg.label_it}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4 mt-6">
-                    {p.cover_url && (
-                      <img
-                        src={p.cover_url}
-                        alt=""
-                        className="w-14 h-14 md:w-20 md:h-20 object-contain shrink-0"
-                      />
+                    <div className="flex items-center gap-4 mt-6">
+                      {p.cover_url && (
+                        <img
+                          src={p.cover_url}
+                          alt=""
+                          className="w-14 h-14 md:w-20 md:h-20 object-contain shrink-0"
+                        />
+                      )}
+                      <h3 className="font-display text-4xl md:text-6xl leading-[0.95] min-w-0 break-words">
+                        {title}
+                      </h3>
+                    </div>
+                    {summary && (
+                      <p className="font-body text-base md:text-lg mt-4 leading-relaxed text-muted-foreground">
+                        {summary}
+                      </p>
                     )}
-                    <h3 className="font-display text-4xl md:text-6xl leading-[0.95] min-w-0 break-words">
-                      {title}
-                    </h3>
-                  </div>
-                  {summary && (
-                    <p className="font-body text-base md:text-lg mt-4 leading-relaxed text-muted-foreground">
-                      {summary}
-                    </p>
-                  )}
-                  {isOpen && body && (
-                    <p className="font-body text-base mt-4 leading-relaxed border-t-2 border-foreground pt-4">
-                      {body}
-                    </p>
-                  )}
-                  <div className="mt-6 pt-6 flex flex-wrap gap-3 items-center">
-                    <button
-                      data-cursor="link"
-                      onClick={() => setOpen(isOpen ? null : p.id)}
-                      className="font-pixel text-sm underline underline-offset-4 hover:text-accent"
-                    >
-                      {isOpen ? `− ${t("collapse")}` : `+ ${t("expand")}`}
-                    </button>
-                    {p.link_url && (
-                      <PixelButton href={p.link_url} target="_blank" rel="noreferrer">
-                        {t("viewProject")}
-                      </PixelButton>
+                    {isOpen && body && (
+                      <p className="font-body text-base mt-4 leading-relaxed border-t-2 border-foreground pt-4">
+                        {body}
+                      </p>
                     )}
-                  </div>
-                </article>
-              );
-            })}
+                    <div className="mt-6 pt-6 flex flex-wrap gap-3 items-center">
+                      <button
+                        data-cursor="link"
+                        onClick={() => setOpen(isOpen ? null : p.id)}
+                        className="font-pixel text-sm underline underline-offset-4 hover:text-accent"
+                      >
+                        {isOpen ? `− ${t("collapse")}` : `+ ${t("expand")}`}
+                      </button>
+                      {p.link_url && (
+                        <PixelButton href={p.link_url} target="_blank" rel="noreferrer">
+                          {t("viewProject")}
+                        </PixelButton>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
