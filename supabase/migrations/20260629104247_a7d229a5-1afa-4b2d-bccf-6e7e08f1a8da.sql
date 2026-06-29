@@ -1,0 +1,1 @@
+UPDATE projects SET cover_url = '/__l5e/assets-v1/a4a9d141-8bb1-490e-9389-957fa006caff/logo-oracolo.svg' WHERE title_en = 'Oracolo del Silicio';
