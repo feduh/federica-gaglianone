@@ -32,7 +32,7 @@ export function Footer() {
             ))}
           </ul>
           <p className="font-pixel text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {profile.name.toUpperCase()} · CRAFTED WITH RIGOR
+            © {new Date().getFullYear()} {profile.name.toUpperCase()} · CRAFTED WITH LOVE
           </p>
         </div>
       </div>
