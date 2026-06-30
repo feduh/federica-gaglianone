@@ -123,7 +123,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                 return (
                   <article
                     key={p.id}
-                    className="bg-background border-2 border-foreground p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)]"
+                    className={`bg-background border-2 p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full ${idx === 0 ? "md:basis-[calc(62%-0.5rem)]" : "md:basis-[calc(38%-0.5rem)]"} ${isOpen ? "card-expanded" : "border-foreground"}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <span className="font-pixel text-xs text-muted-foreground">
