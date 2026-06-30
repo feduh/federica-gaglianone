@@ -77,7 +77,12 @@
 
 @layer base {
   * {
-    border-color: var(--color-border);
+  border-color: var(--color-border);
+  }
+
+  .card-expanded {
+    background-color: color-mix(in oklab, var(--color-accent) 8%, var(--color-background));
+    border-color: var(--color-accent);
   }
 
   html,
