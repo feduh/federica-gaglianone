@@ -114,7 +114,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
             onKeyDown={onKeyDown}
             className="overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <div className="flex items-stretch gap-4">
+            <div className="flex items-start gap-4">
               {filtered.map((p, idx) => {
                 const isOpen = open === p.id;
                 const title = lang === "en" ? p.title_en : p.title_it;
