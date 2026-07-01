@@ -123,7 +123,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                 return (
                   <article
                     key={p.id}
-                    className={`bg-background border-2 p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)] ${isOpen ? "card-expanded" : "border-foreground"}`}
+                    className={`bg-background border-2 p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)] ${isOpen ? "min-h-[34rem] md:min-h-[36rem] card-expanded" : "h-[34rem] md:h-[36rem] overflow-hidden border-foreground"}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <span className="font-pixel text-xs text-muted-foreground">
@@ -153,7 +153,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       </h3>
                     </div>
                     {summary && (
-                      <p className="font-body text-base md:text-lg mt-4 leading-relaxed text-muted-foreground">
+                      <p className={`font-body text-base md:text-lg mt-4 leading-relaxed text-muted-foreground ${isOpen ? "" : "overflow-hidden [display:-webkit-box] [-webkit-line-clamp:4] [-webkit-box-orient:vertical]"}`}>
                         {summary}
                       </p>
                     )}
@@ -162,7 +162,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                         {body}
                       </p>
                     )}
-                    <div className="mt-6 pt-6 flex flex-wrap gap-3 items-center">
+                    <div className="mt-auto pt-6 flex flex-wrap gap-3 items-center">
                       <button
                         data-cursor="link"
                         onClick={() => setOpen(isOpen ? null : p.id)}
