@@ -18,11 +18,13 @@ export const profile = {
     "I trained as an artist and re-trained as a computer scientist. My work sits at the intersection of human-computer interaction, generative systems, and the cultural history of technology — using code as a medium to interrogate how we look at cities, bodies, and data.",
     "I hold a BA in New Technologies of Art from Accademia Albertina di Belle Arti di Torino (110/110 with Honors, Edisu scholarship) and I am currently completing standalone courses in Computer Science, Databases, and Networks at Politecnico di Torino, alongside academic certificates in Computer Science and in Mathematics & Statistics at Università del Piemonte Orientale.",
     "I write and teach in Italian and English (IELTS Academic 7.0), code in Python, SQL and TypeScript, and hold certifications from IBM Data Science and AWS Re/Start. I care deeply about typography, slow software, and rigorous citations.",
+    "In September 2026 I will begin an MSc in Data Science and AI at Newcastle University. I am increasingly drawn to satellite data, environmental sensing, and remote sensing — and I want to bridge these spatial datasets with interactive installations and critical data science, treating orbital imagery as both evidence and medium.",
   ],
   bio_it: [
     "Mi sono formata come artista e mi sto riformando come informatica. Il mio lavoro vive all'incrocio fra interazione uomo-macchina, sistemi generativi e storia culturale della tecnologia — usando il codice come medium per interrogare il modo in cui guardiamo città, corpi e dati.",
     "Ho conseguito la laurea triennale in Nuove Tecnologie dell'Arte all'Accademia Albertina di Belle Arti di Torino (110/110 con lode, borsa Edisu) e sto completando corsi singoli di Informatica, Basi di Dati e Reti al Politecnico di Torino, insieme ai certificati accademici in Informatica e in Matematica e Statistica all'Università del Piemonte Orientale.",
     "Scrivo e insegno in italiano e inglese (IELTS Academic 7.0), programmo in Python, SQL e TypeScript, e ho certificazioni IBM Data Science e AWS Re/Start. Tengo molto a tipografia, slow software e citazioni rigorose.",
+    "A settembre 2026 inizierò la laurea magistrale in Data Science e AI alla Newcastle University. Mi interesso sempre più ai dati satellitari, al telerilevamento e alla raccolta dati ambientale — e vorrei fare da ponte tra questi dataset spaziali, le installazioni interattive e la data science critica, trattando le immagini orbitali sia come evidenza sia come medium.",
   ],
 };
 
