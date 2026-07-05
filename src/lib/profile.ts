@@ -24,6 +24,7 @@ export const profile = {
     "Mi sono formata come artista e mi sto riformando come informatica. Il mio lavoro vive all'incrocio fra interazione uomo-macchina, sistemi generativi e storia culturale della tecnologia — usando il codice come medium per interrogare il modo in cui guardiamo città, corpi e dati.",
     "Ho conseguito la laurea triennale in Nuove Tecnologie dell'Arte all'Accademia Albertina di Belle Arti di Torino (110/110 con lode, borsa Edisu) e sto completando corsi singoli di Informatica, Basi di Dati e Reti al Politecnico di Torino, insieme ai certificati accademici in Informatica e in Matematica e Statistica all'Università del Piemonte Orientale.",
     "Scrivo e insegno in italiano e inglese (IELTS Academic 7.0), programmo in Python, SQL e TypeScript, e ho certificazioni IBM Data Science e AWS Re/Start. Tengo molto a tipografia, slow software e citazioni rigorose.",
+    "A settembre 2026 inizierò la laurea magistrale in Data Science e AI alla Newcastle University. Mi interesso sempre più ai dati satellitari, al telerilevamento e alla raccolta dati ambientale — e vorrei fare da ponte tra questi dataset spaziali, le installazioni interattive e la data science critica, trattando le immagini orbitali sia come evidenza sia come medium.",
   ],
 };
 
