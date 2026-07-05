@@ -18,6 +18,7 @@ export const profile = {
     "I trained as an artist and re-trained as a computer scientist. My work sits at the intersection of human-computer interaction, generative systems, and the cultural history of technology — using code as a medium to interrogate how we look at cities, bodies, and data.",
     "I hold a BA in New Technologies of Art from Accademia Albertina di Belle Arti di Torino (110/110 with Honors, Edisu scholarship) and I am currently completing standalone courses in Computer Science, Databases, and Networks at Politecnico di Torino, alongside academic certificates in Computer Science and in Mathematics & Statistics at Università del Piemonte Orientale.",
     "I write and teach in Italian and English (IELTS Academic 7.0), code in Python, SQL and TypeScript, and hold certifications from IBM Data Science and AWS Re/Start. I care deeply about typography, slow software, and rigorous citations.",
+    "In September 2026 I will begin an MSc in Data Science and AI at Newcastle University. I am increasingly drawn to satellite data, environmental sensing, and remote sensing — and I want to bridge these spatial datasets with interactive installations and critical data science, treating orbital imagery as both evidence and medium.",
   ],
   bio_it: [
     "Mi sono formata come artista e mi sto riformando come informatica. Il mio lavoro vive all'incrocio fra interazione uomo-macchina, sistemi generativi e storia culturale della tecnologia — usando il codice come medium per interrogare il modo in cui guardiamo città, corpi e dati.",
