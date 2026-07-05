@@ -26,6 +26,10 @@ export function TopBar() {
             {t("navProjects")}
           </a>
           <span aria-hidden>/</span>
+          <a data-cursor="link" href="#research" className="px-1 hover:text-accent">
+            {t("navResearch")}
+          </a>
+          <span aria-hidden>/</span>
           <a data-cursor="link" href="#contact" className="px-1 hover:text-accent">
             {t("navContact")}
           </a>
