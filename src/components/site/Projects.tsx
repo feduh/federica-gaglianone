@@ -66,6 +66,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
   return (
     <section id="projects" className="border-t-2 border-foreground py-24 md:py-32">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
+        <p className="font-pixel text-sm text-muted-foreground mb-4">{t("chapter03")}</p>
         <div className="flex items-end justify-between gap-6 mb-12 flex-wrap">
           <h2 className="font-display text-5xl md:text-7xl text-accent">{t("projectsTitle")}</h2>
           {filtered.length > 0 && (

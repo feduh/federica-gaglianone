@@ -7,6 +7,7 @@ import { IntroAsymmetric } from "@/components/site/IntroAsymmetric";
 import { Timeline } from "@/components/site/Timeline";
 import { Publications } from "@/components/site/Publications";
 import { Projects } from "@/components/site/Projects";
+import { ResearchDirections } from "@/components/site/ResearchDirections";
 import { Footer } from "@/components/site/Footer";
 
 const tagsQ = queryOptions({ queryKey: ["tags"], queryFn: () => getTags() });
