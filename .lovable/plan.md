@@ -1,114 +1,75 @@
+Hai ragione: oggi il sito è una serie di sezioni ben impaginate ma slegate — nome gigante, timeline, publications, projects, footer. Manca il **filo** che spiega chi sei, cosa cerchi e perché. Ecco cosa propongo, dal più impattante al più cosmetico. Dimmi cosa tenere e cosa scartare, poi implemento.
 
-## Direzione di design
+## 1. Storytelling — dare un "arco" alla pagina
 
-**Atmosfera**: galleria d'arte contemporanea + dettagli pixel/neo-brutalist. Autorevole ma tech.
+**Statement d'apertura** (nuova mini-sezione tra nome e bio):
+Una frase-manifesto grande, in Fraunces, sopra le righe. Es.:
+*"From painting anatomies to programming them — I build tools that help us look at cities, bodies, and data more carefully."*
+È il gancio narrativo che oggi manca: chi legge capisce in 2 secondi da dove vieni e dove stai andando.
 
-- **Palette** (light): sfondo avorio caldo `#F2EEE5`, inchiostro `#0E0E0C`, accento elettrico `#FF3D00` usato solo su hover/tag attivi e bordi pixel.
-- **Palette** (dark): fondo `#0E0E0C`, testo `#F2EEE5`, accento `#FF7A45`.
-- **Tipografia** (Google Fonts via `<link>` nel root):
-  - Display elegante → **Fraunces** (serif variabile, optical size alta, weight 300/700) per nome, titoli di sezione, email footer.
-  - Pixel/UI → **VT323** per tag, label anno timeline, numerazione `01/02`, micro-copy, etichette bottoni.
-  - Body → **Inter** 400/500 per bio e abstract.
-- **Spaziature**: enormi (sezioni 20–30vh padding), griglia 12 colonne, titoli 12–20vw.
-- **Bottoni pixel**: bordo 2px nero, nessun radius, shadow offset `4px 4px 0 ink`; hover = translate `-2px -2px` + shadow `6px 6px 0 accent`.
-- **Dark mode**: toggle in alto a destra, classe `.dark` su `<html>`, persistito in `localStorage`, default = preferenza sistema.
-- **Custom cursor**: cerchio outline che segue il mouse con lerp (rAF). Sopra elementi con `data-cursor="link"` si trasforma in un quadrato pixelato 16px + accento. Nascosto su `pointer: coarse` (touch).
-- **Lingua**: default EN, toggle `EN / IT` in alto. `LanguageProvider` (context) + dizionario tipizzato per le stringhe UI; per i contenuti dal DB si leggono i campi `_en/_it`.
+**Chapter markers** sopra ogni sezione:
+Invece di titoli isolati ("Timeline / Publications / Projects"), etichettarli come capitoli con una riga di raccordo:
 
-## Struttura della pagina (single route `/`)
+- `Ch. 01 — Where I come from` → Timeline
+- `Ch. 02 — What I've written` → Publications
+- `Ch. 03 — What I've built` → Projects
+- `Ch. 04 — What comes next` → nuova sezione (vedi §2)
+- `Ch. 05 — Let's talk` → Footer
 
-1. **Intro asimmetrica** — al posto dell'hero:
-   - Micro-tag pixel in alto: `AVAILABLE FOR RESEARCH · BASED IN [CITY] · EN/IT`.
-   - Nome gigante a tutta larghezza in Fraunces (sfora dal viewport sui lati).
-   - Sotto, "ASPIRING RESEARCHER" in pixel font.
-   - Bio in 3 blocchi posizionati asimmetricamente su CSS grid 12 col: blocco 1 col 2–5, blocco 2 col 7–10 più in basso, blocco 3 col 4–8 in fondo.
+Trasforma la pagina in un percorso, non in un elenco.
 
-2. **Timeline studi**:
-   - Griglia rigida orizzontale su desktop (5 colonne), verticale su mobile.
-   - Ogni cella: anno grande in pixel + titolo breve. Su hover/focus appare overlay con istituzione, città, descrizione bilingue. Transizione netta (no easing soft).
+**Bio più narrativa**: i 4 paragrafi attuali sono un CV in prosa. Riscriverli come 3 momenti (Origine → Transizione → Direzione), togliendo l'elenco di certificazioni (che sta meglio in una sezione "Credentials" compatta o direttamente in timeline).
 
-3. **Publications** — layout editoriale:
-   - Lista numerata `01 / 02 / 03` in pixel, titolo grande in display, autori · venue · anno in micro-copy.
-   - Tag chips filtrabili (multi-select OR) sopra la lista.
-   - Click sulla riga = accordion che apre abstract bilingue + bottoni pixel `READ PDF`, `DOI`.
+## 2. Nuova sezione "Research directions" (fra Projects e Footer)
 
-4. **Projects** — layout esibizione:
-   - Griglia 2 colonne irregolari (alcune card occupano 2 righe).
-   - Card: titolo display, anno, tag pixel, summary breve. Accordion espande descrizione lunga + bottone pixel `VIEW PROJECT`.
-   - Stessi filtri tag.
+Le tue frasi su satelliti / remote sensing / installazioni interattive oggi sono sepolte in fondo al bio. Meritano una sezione dedicata: 3–4 card grandi con **domande di ricerca aperte** che vuoi esplorare al PhD, es:
 
-5. **Contact / footer**:
-   - Email gigante in Fraunces (linkata), handle social in pixel font, copyright minimal.
+- *"Can satellite imagery become a medium for public interactive installations?"*
+- *"How do we make environmental sensing legible to non-experts?"*
+- *"What does critical data science look like in a cultural institution?"*
 
-## Filtri Tag
+Questo è il pezzo che manca per un profilo "aspiring researcher": non solo cosa hai fatto, ma **cosa vuoi indagare**. È anche l'aggancio naturale per potenziali advisor che leggono.
 
-- Stato in URL via `validateSearch` di TanStack (`?tags=ml,hci`) → condivisibile.
-- Tag fetchati dal DB; bottone "Clear" per resettare.
+## 3. Timeline che racconta, non solo elenca
 
-## Backend — Lovable Cloud
+- Ordine cronologico **crescente** (2015 → 2027), non decrescente: si legge come una storia dall'inizio.
+- Aggiungere una micro-frase narrativa sotto ogni tappa (una sola riga, non descrizione lunga) tipo *"the year I stopped drawing and started coding"* — visibile sempre, non solo su hover.
+- Sostituire "Hover for details" (poco accessibile e invisibile su mobile) con detail panel sempre aperto sotto, che aggiorna con click.
 
-Attivo Lovable Cloud e creo schema con colonne separate `_en/_it` (più semplice da gestire e tipizzare di un jsonb):
+## 4. Publications — gestire lo stato "vuoto" con dignità
 
-```text
-tags
-  id uuid pk, slug text unique,
-  label_en text not null, label_it text not null
+Ora probabilmente hai 0/1 pubblicazioni reali. Invece di mostrare la sezione mezza vuota, o:
 
-publications
-  id uuid pk, year int not null,
-  authors text not null, venue text, doi text, pdf_url text,
-  title_en text not null, title_it text not null,
-  abstract_en text, abstract_it text,
-  sort_order int default 0, created_at timestamptz default now()
+- (a) Nasconderla finché non c'è nulla e mostrare al suo posto **"Writing in progress"** con 1–2 work-in-progress dichiarati (tesi triennale già c'è come progetto, si potrebbe promuovere qui come "Undergraduate thesis"), oppure
+- (b) Rinominarla **"Writing"** e includere tesi + eventuali saggi/articoli non peer-reviewed, chiaramente etichettati.
 
-projects
-  id uuid pk, year int not null,
-  cover_url text, link_url text,
-  title_en text not null, title_it text not null,
-  summary_en text, summary_it text,
-  body_en text, body_it text,
-  sort_order int default 0, created_at timestamptz default now()
+Da decidere insieme.
 
-publication_tags(publication_id, tag_id)  -- pk composta, FK cascade
-project_tags(project_id, tag_id)          -- pk composta, FK cascade
-```
+## 5. Micro-miglioramenti
 
-- **RLS**: tutte e 5 le tabelle leggibili pubblicamente (`SELECT` per `anon` + `authenticated`). Nessuna policy di scrittura pubblica — i contenuti li gestisci dalla dashboard Cloud o tramite migrazioni. GRANT espliciti come da regole del template (`SELECT … TO anon, authenticated`).
-- **Lettura**: `createServerFn` (`getPublications`, `getProjects`, `getTags`) usando il client server con publishable key. Caricati nel loader con `ensureQueryData` + `useSuspenseQuery`.
-- **Seed iniziale**: una migrazione inserisce 3 pubblicazioni, 3 progetti, 6 tag come placeholder, tutti chiaramente marcati `"Sample —"` così sai cosa sostituire dalla dashboard.
+- **Footer**: i social oggi sono `href="#"` placeholder. Vanno riempiti o rimossi (link morti danno l'idea di sito non finito). "Crafted with love" → sostituire con qualcosa di più tuo (es. *"Set in Fraunces & VT323 · Built in Turin"*).
+- **"Based in Bologna"** nel dizionario i18n contraddice `profile.city_en = "Turin"`. Da uniformare.
+- **CTA nel footer**: aggiungere sotto l'email una riga *"Currently looking for: PhD supervisors in HCI / creative AI / remote sensing · Collaborations on interactive installations"* — chiarissimo cosa cercare da te.
+- **OG image**: oggi mancante; generare un'immagine social con nome + tagline così i link condivisi non sono anonimi.
+- **Meta description**: attualmente generica ("Bilingual academic portfolio…"). Sostituire con lo statement d'apertura.
 
-## Contenuti
+## 6. Fuori scope (menziono, non faccio ora)
 
-Visto che non hai fornito dati reali, riempio con placeholder ben formati:
-- Nome: `[Your Name]` (sostituibile in un solo file `src/lib/profile.ts`).
-- 3 paragrafi di bio EN/IT generici credibili per "aspiring researcher".
-- 4 voci timeline esempio (BSc → MSc → Visiting → PhD candidate).
-- Email/social: placeholder `you@example.com`.
+- Route dedicate `/projects/:slug` con caso studio lungo (utile quando avrai 4+ progetti seri).
+- Sezione "Reading list" / "Currently thinking about" — molto da researcher, ma richiede manutenzione continua.
+- Animazione al primo caricamento sul nome (reveal lettera per lettera) — carino ma da fare solo se il resto convince.
 
-Quando vuoi sostituirli: profilo statico in `src/lib/profile.ts`, timeline in `src/lib/timeline.ts`, mentre publications/projects/tag li gestisci dalla Cloud UI.
+---
 
-## File da creare
+## Cosa mi serve da te
 
-- `src/styles.css` — aggiorno token oklch (avorio/ink/accento) e registro `--font-display`, `--font-pixel`, `--font-body`. Mantengo `@custom-variant dark`.
-- `src/routes/__root.tsx` — aggiungo `<link>` Google Fonts (Fraunces, VT323, Inter), monto `LanguageProvider`, `ThemeProvider`, `<CustomCursor />`.
-- `src/routes/index.tsx` — orchestrazione sezioni, loader chiama i 3 server fn.
-- `src/components/site/CustomCursor.tsx`
-- `src/components/site/ThemeToggle.tsx`, `LanguageToggle.tsx`, `TopBar.tsx`
-- `src/components/site/IntroAsymmetric.tsx`
-- `src/components/site/Timeline.tsx`
-- `src/components/site/Publications.tsx`, `PublicationRow.tsx`
-- `src/components/site/Projects.tsx`, `ProjectCard.tsx`
-- `src/components/site/TagFilter.tsx`, `PixelButton.tsx`, `Footer.tsx`
-- `src/lib/i18n.tsx` (context + dizionario EN/IT)
-- `src/lib/profile.ts`, `src/lib/timeline.ts` (contenuti statici tipizzati)
-- `src/lib/portfolio.functions.ts` — `getPublications`, `getProjects`, `getTags`
-- `src/lib/portfolio-types.ts`
-- Migrazione SQL: 5 tabelle + GRANT + RLS + policy SELECT public + seed.
+Rispondi in libertà, non serve punto per punto:
 
-## Fuori scope ora (predisposto ma non implementato)
+1. Ti piace l'idea dei **chapter markers** + statement d'apertura, o preferisci restare più sobria? 
+  si mi piace
+2. Riscrivo la **bio** in versione narrativa (3 paragrafi asciutti)? si
+3. Aggiungo la sezione **"Research directions"** con 3–4 domande aperte? Se sì, le scrivo io in prima bozza e tu correggi. va bene
+4. Publications: opzione (a) nascondi finché vuota, o (b) rinomina "Writing" e includi tesi? meglio inserire la tesi in writing
+5. Social del footer: dammi gli URL veri (Scholar/GitHub/ORCID/X/LinkedIn) o li tolgo. ancora non li ho... tienili vuoti per ora
 
-- Route dedicate `/publications/:slug` e `/projects/:slug` con OG image (la struttura dati è già pronta, aggiungiamo slug se vorrai dopo).
-- CMS interno con login (gestione via Cloud UI per ora).
-- Animazioni WebGL/Three.
-
-Confermando il piano procedo ad attivare Lovable Cloud e costruire il tutto.
+Appena mi confermi, aggiorno il piano con l'elenco preciso dei file da toccare e passiamo a build.
