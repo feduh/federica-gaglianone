@@ -12,17 +12,29 @@ type Dict = Record<string, { en: string; it: string }>;
 
 const dict = {
   available: { en: "Available for research", it: "Disponibile per la ricerca" },
-  basedIn: { en: "Based in Bologna, IT", it: "Con base a Bologna, IT" },
+  basedIn: { en: "Based in Turin, IT", it: "Con base a Torino, IT" },
   role: { en: "Aspiring researcher", it: "Aspirante ricercatrice" },
   navIntro: { en: "Intro", it: "Intro" },
   navTimeline: { en: "Timeline", it: "Percorso" },
-  navPublications: { en: "Publications", it: "Pubblicazioni" },
+  navPublications: { en: "Writing", it: "Scritti" },
   navProjects: { en: "Projects", it: "Progetti" },
+  navResearch: { en: "Directions", it: "Direzioni" },
   navContact: { en: "Contact", it: "Contatti" },
+  // Chapter markers — the narrative arc across the page.
+  chapter01: { en: "Ch. 01 — Where I come from", it: "Cap. 01 — Da dove vengo" },
+  chapter02: { en: "Ch. 02 — What I've written", it: "Cap. 02 — Cosa ho scritto" },
+  chapter03: { en: "Ch. 03 — What I've built", it: "Cap. 03 — Cosa ho costruito" },
+  chapter04: { en: "Ch. 04 — What comes next", it: "Cap. 04 — Cosa viene dopo" },
+  chapter05: { en: "Ch. 05 — Let's talk", it: "Cap. 05 — Parliamone" },
   timelineTitle: { en: "Academic path", it: "Percorso accademico" },
-  timelineHint: { en: "Hover a year for details", it: "Passa il mouse su un anno" },
-  publicationsTitle: { en: "Publications", it: "Pubblicazioni" },
+  timelineHint: { en: "Click a year for details", it: "Clicca su un anno per i dettagli" },
+  publicationsTitle: { en: "Writing", it: "Scritti" },
   projectsTitle: { en: "Projects", it: "Progetti" },
+  researchTitle: { en: "Research directions", it: "Direzioni di ricerca" },
+  researchIntro: {
+    en: "Open questions I want to spend the next years living inside.",
+    it: "Domande aperte con cui vorrei convivere nei prossimi anni.",
+  },
   contactTitle: { en: "Write to me", it: "Scrivimi" },
   filterAll: { en: "All", it: "Tutti" },
   filterClear: { en: "Clear filters", it: "Pulisci filtri" },
@@ -34,6 +46,10 @@ const dict = {
   toggleLang: { en: "IT", it: "EN" },
   toggleTheme: { en: "Theme", it: "Tema" },
   emptyResults: { en: "No items match the current tags.", it: "Nessun elemento corrisponde ai tag selezionati." },
+  footerColophon: {
+    en: "Set in Fraunces & VT323 · Built in Turin",
+    it: "Composto in Fraunces & VT323 · Costruito a Torino",
+  },
 } satisfies Dict;
 
 type Key = keyof typeof dict;

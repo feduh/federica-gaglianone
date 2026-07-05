@@ -4,18 +4,21 @@ import { timeline } from "@/lib/profile";
 
 export function Timeline() {
   const { lang, t } = useLang();
-  const [active, setActive] = useState<number | null>(0);
+  // Chronological ascending: reads as a story from the beginning.
+  // Default to the most recent (last) entry.
+  const [active, setActive] = useState<number | null>(timeline.length - 1);
   const current = active !== null ? timeline[active] : null;
 
   return (
     <section id="timeline" className="border-t-2 border-foreground py-24 md:py-32">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
+        <p className="font-pixel text-sm text-muted-foreground mb-4">{t("chapter01")}</p>
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <h2 className="font-display text-5xl md:text-7xl text-accent">{t("timelineTitle")}</h2>
           <span className="font-pixel text-sm text-muted-foreground">→ {t("timelineHint")}</span>
         </div>
 
-        {/* Grid of years */}
+        {/* Grid of years — chronological */}
         <div className="grid grid-cols-2 md:grid-cols-5 border-2 border-foreground">
           {timeline.map((item, i) => {
             const isActive = active === i;
@@ -30,9 +33,12 @@ export function Timeline() {
                   isActive ? "bg-foreground text-background" : "hover:bg-accent hover:text-accent-foreground"
                 }`}
               >
-                <div className="font-pixel text-3xl md:text-5xl leading-none">{item.year}</div>
-                <div className="font-pixel text-xs mt-3 opacity-80">
+                <div className="font-pixel text-2xl md:text-4xl leading-none">{item.year}</div>
+                <div className="font-pixel text-[11px] mt-3 opacity-80">
                   {lang === "en" ? item.institution_en : item.institution_it}
+                </div>
+                <div className="font-body text-xs italic mt-3 opacity-70 leading-snug">
+                  {lang === "en" ? item.caption_en : item.caption_it}
                 </div>
               </button>
             );
