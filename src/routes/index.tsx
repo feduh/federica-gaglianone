@@ -20,15 +20,18 @@ export const Route = createFileRoute("/")({
       { title: `${profile.name} — ${profile.role_en}` },
       {
         name: "description",
-        content:
-          "Bilingual academic portfolio: timeline of studies, publications, and research projects.",
+        content: profile.statement_en,
       },
       { property: "og:title", content: `${profile.name} — ${profile.role_en}` },
       {
         property: "og:description",
-        content: "Timeline, publications, and projects of an aspiring researcher.",
+        content: profile.statement_en,
       },
+      { property: "og:type", content: "profile" },
       { property: "og:url", content: "https://federica-gaglianone.lovable.app/" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: `${profile.name} — ${profile.role_en}` },
+      { name: "twitter:description", content: profile.statement_en },
     ],
     links: [
       { rel: "canonical", href: "https://federica-gaglianone.lovable.app/" },
@@ -85,6 +88,7 @@ function HomePage() {
         <Timeline />
         <Publications items={publications} tags={tags} />
         <Projects items={projects} tags={tags} />
+        <ResearchDirections />
       </main>
       <Footer />
     </div>
