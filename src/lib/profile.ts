@@ -18,12 +18,16 @@ export const profile = {
     "Currently looking for: PhD supervisors in HCI, creative AI, remote sensing · Collaborations on interactive installations.",
   seeking_it:
     "Attualmente cerco: relatori di dottorato in HCI, IA creativa, telerilevamento · Collaborazioni su installazioni interattive.",
+  // TODO: sostituire gli URL placeholder con i profili reali.
   socials: [
-    { label: "Scholar", href: "" },
-    { label: "GitHub", href: "" },
-    { label: "OrcID", href: "" },
-    { label: "LinkedIn", href: "" },
+    { label: "Scholar", href: "https://scholar.google.com/citations?user=REPLACE_ME" },
+    { label: "GitHub", href: "https://github.com/REPLACE_ME" },
+    { label: "OrcID", href: "https://orcid.org/0000-0000-0000-0000" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/REPLACE_ME" },
+    { label: "Academia", href: "https://independent.academia.edu/REPLACE_ME" },
+    { label: "ResearchGate", href: "https://www.researchgate.net/profile/REPLACE_ME" },
   ],
+
   // Three narrative movements: origin → transition → direction.
   bio_en: [
     "I was trained as an artist. Five years of art high school, then a BA in New Technologies of Art at Accademia Albertina di Torino, where I learned to look slowly — at bodies, at cities, at the surfaces of things — and to treat that looking as a form of research.",
