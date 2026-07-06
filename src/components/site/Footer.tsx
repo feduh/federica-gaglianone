@@ -43,14 +43,21 @@ export function Footer() {
               ))}
             </ul>
           ) : (
-            <span className="font-pixel text-xs text-muted-foreground">
-              {t("footerColophon")}
-            </span>
+            <span />
           )}
-          <p className="font-pixel text-xs text-muted-foreground">
-            © {new Date().getFullYear()} {profile.name.toUpperCase()}
-          </p>
+          <div className="flex flex-wrap items-center gap-3 font-pixel text-xs text-muted-foreground">
+            <a href="/privacy" data-cursor="link" className="hover:text-foreground transition-colors">
+              {t("navPrivacy")}
+            </a>
+            <span aria-hidden>·</span>
+            <a href="/cookies" data-cursor="link" className="hover:text-foreground transition-colors">
+              {t("navCookies")}
+            </a>
+            <span aria-hidden>·</span>
+            <span>© {new Date().getFullYear()} {profile.name.toUpperCase()}</span>
+          </div>
         </div>
+
       </div>
     </footer>
   );
