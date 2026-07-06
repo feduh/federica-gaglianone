@@ -46,10 +46,13 @@ const dict = {
   toggleLang: { en: "IT", it: "EN" },
   toggleTheme: { en: "Theme", it: "Tema" },
   emptyResults: { en: "No items match the current tags.", it: "Nessun elemento corrisponde ai tag selezionati." },
-  footerColophon: {
-    en: "Set in Fraunces & VT323 · Built in Turin",
-    it: "Composto in Fraunces & VT323 · Costruito a Torino",
-  },
+  navPrivacy: { en: "Privacy", it: "Privacy" },
+  navCookies: { en: "Cookies", it: "Cookie" },
+  privacyTitle: { en: "Privacy Policy", it: "Informativa sulla privacy" },
+  cookiesTitle: { en: "Cookie Policy", it: "Informativa sui cookie" },
+  legalBack: { en: "← Back home", it: "← Torna alla home" },
+  legalUpdated: { en: "Last updated", it: "Ultimo aggiornamento" },
+
 } satisfies Dict;
 
 type Key = keyof typeof dict;
