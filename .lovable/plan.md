@@ -1,75 +1,79 @@
-Hai ragione: oggi il sito è una serie di sezioni ben impaginate ma slegate — nome gigante, timeline, publications, projects, footer. Manca il **filo** che spiega chi sei, cosa cerchi e perché. Ecco cosa propongo, dal più impattante al più cosmetico. Dimmi cosa tenere e cosa scartare, poi implemento.
+# Piano
 
-## 1. Storytelling — dare un "arco" alla pagina
+## 1. Colophon nel footer — rimozione
 
-**Statement d'apertura** (nuova mini-sezione tra nome e bio):
-Una frase-manifesto grande, in Fraunces, sopra le righe. Es.:
-*"From painting anatomies to programming them — I build tools that help us look at cities, bodies, and data more carefully."*
-È il gancio narrativo che oggi manca: chi legge capisce in 2 secondi da dove vieni e dove stai andando.
+In `src/components/site/Footer.tsx` elimino il ramo `else` che mostra `footerColophon` ("Set in Fraunces & VT323 · Built in Turin"). In `src/lib/i18n.tsx` rimuovo la chiave `footerColophon` da `dict`. Quando non ci sono social attivi, quel lato del footer resta semplicemente vuoto (rimane solo il © a destra).
 
-**Chapter markers** sopra ogni sezione:
-Invece di titoli isolati ("Timeline / Publications / Projects"), etichettarli come capitoli con una riga di raccordo:
+## 2. Loghi progetti — da CDN a `/public`
 
-- `Ch. 01 — Where I come from` → Timeline
-- `Ch. 02 — What I've written` → Publications
-- `Ch. 03 — What I've built` → Projects
-- `Ch. 04 — What comes next` → nuova sezione (vedi §2)
-- `Ch. 05 — Let's talk` → Footer
+Oggi il DB ha:
 
-Trasforma la pagina in un percorso, non in un elenco.
+- `Il Bel Paese` → `cover_url = /__l5e/assets-v1/…/il-bel-paese.svg`
+- `Oracolo del Silicio` → `cover_url = /__l5e/assets-v1/…/logo-oracolo.svg`
 
-**Bio più narrativa**: i 4 paragrafi attuali sono un CV in prosa. Riscriverli come 3 momenti (Origine → Transizione → Direzione), togliendo l'elenco di certificazioni (che sta meglio in una sezione "Credentials" compatta o direttamente in timeline).
+Azioni:
 
-## 2. Nuova sezione "Research directions" (fra Projects e Footer)
+- Migrazione dati (via tool Supabase) che aggiorna `projects.cover_url`:
+  - `Il Bel Paese` → `/projects-cover/il-bel-paese.svg`
+  - `Oracolo del Silicio` → `/projects-cover/oracolo-del-silicio.svg`
+- Elimino i due pointer inutilizzati: `src/assets/il-bel-paese.svg.asset.json` e `src/assets/logo-oracolo.svg.asset.json` (e i corrispondenti file su CDN via `lovable-assets delete`, così non restano orfani).
+- Convenzione da qui in avanti: metti l'SVG in `public/projects-cover/<nome>.svg` e nel DB salvi il path relativo `/projects-cover/<nome>.svg`. Nessuna modifica di schema (la colonna `cover_url text` è già adatta) e nessuna modifica al codice del renderer (`<img src={p.cover_url}>` funziona già con path relativi). Aggiungo un breve README in `public/projects-cover/README.md` con questa convenzione.
 
-Le tue frasi su satelliti / remote sensing / installazioni interattive oggi sono sepolte in fondo al bio. Meritano una sezione dedicata: 3–4 card grandi con **domande di ricerca aperte** che vuoi esplorare al PhD, es:
+## 3. Aggiornamento credenziali Supabase → `shmgwtmlplbnwqensbtg`
 
-- *"Can satellite imagery become a medium for public interactive installations?"*
-- *"How do we make environmental sensing legible to non-experts?"*
-- *"What does critical data science look like in a cultural institution?"*
+Aggiorno:
 
-Questo è il pezzo che manca per un profilo "aspiring researcher": non solo cosa hai fatto, ma **cosa vuoi indagare**. È anche l'aggancio naturale per potenziali advisor che leggono.
+- `.env` con i sei valori nuovi che hai fornito (SUPABASE_* e VITE_SUPABASE_*).
+- `supabase/config.toml` già ha `project_id = "shmgwtmlplbnwqensbtg"`, quindi resta com'è.
 
-## 3. Timeline che racconta, non solo elenca
+Nota tecnica: `src/integrations/supabase/client.ts` e `types.ts` sono file gestiti dall'integrazione Lovable Cloud. Non li tocco a mano; se dopo il cambio credenziali risultano ancora legati al vecchio progetto, l'integrazione li rigenera al prossimo sync. Se noti errori di connessione dopo l'update, fammelo sapere e li ri-genero.
 
-- Ordine cronologico **crescente** (2015 → 2027), non decrescente: si legge come una storia dall'inizio.
-- Aggiungere una micro-frase narrativa sotto ogni tappa (una sola riga, non descrizione lunga) tipo *"the year I stopped drawing and started coding"* — visibile sempre, non solo su hover.
-- Sostituire "Hover for details" (poco accessibile e invisibile su mobile) con detail panel sempre aperto sotto, che aggiorna con click.
+## 4. Pagine legali — pronte per un futuro pubblico
 
-## 4. Publications — gestire lo stato "vuoto" con dignità
+Aggiungo due pagine minimali, sobrie, coerenti col design system esistente (Fraunces + VT323 + ink/ivory), pensate per il tuo caso: sito personale statico senza raccolta dati oggi, ma predisposto a Google Analytics domani.
 
-Ora probabilmente hai 0/1 pubblicazioni reali. Invece di mostrare la sezione mezza vuota, o:
+Route nuove:
 
-- (a) Nasconderla finché non c'è nulla e mostrare al suo posto **"Writing in progress"** con 1–2 work-in-progress dichiarati (tesi triennale già c'è come progetto, si potrebbe promuovere qui come "Undergraduate thesis"), oppure
-- (b) Rinominarla **"Writing"** e includere tesi + eventuali saggi/articoli non peer-reviewed, chiaramente etichettati.
+- `src/routes/privacy.tsx` → **Privacy Policy** (bilingue via `useLang`), copre:
+  - titolare del trattamento (Federica Gaglianone, email dal `profile.ts`)
+  - dati raccolti: **nessuno** attualmente; sezione "In futuro" che elenca cosa attiveresti (Google Analytics 4 con IP anonimizzato, log server hosting) come placeholder disattivato
+  - base giuridica (art. 6 GDPR), diritti dell'interessato, contatto per esercitarli
+  - hosting: Cloudflare/Lovable
+  - data ultimo aggiornamento
+- `src/routes/cookies.tsx` → **Cookie Policy** minimale: al momento nessun cookie di profilazione; sezione "Cookie tecnici / analitici in futuro" pronta all'attivazione. Nessun banner cookie finché non attivi tracker.
 
-Da decidere insieme.
+Footer: aggiungo nella riga bassa due link piccoli in `font-pixel` a `/privacy` e `/cookies`, accanto al ©. Nessun banner intrusivo.
 
-## 5. Micro-miglioramenti
+I18n: aggiungo chiavi `navPrivacy`, `navCookies` e i testi delle pagine in `src/lib/i18n.tsx` (oppure inline nelle route, decido in build).
 
-- **Footer**: i social oggi sono `href="#"` placeholder. Vanno riempiti o rimossi (link morti danno l'idea di sito non finito). "Crafted with love" → sostituire con qualcosa di più tuo (es. *"Set in Fraunces & VT323 · Built in Turin"*).
-- **"Based in Bologna"** nel dizionario i18n contraddice `profile.city_en = "Turin"`. Da uniformare.
-- **CTA nel footer**: aggiungere sotto l'email una riga *"Currently looking for: PhD supervisors in HCI / creative AI / remote sensing · Collaborations on interactive installations"* — chiarissimo cosa cercare da te.
-- **OG image**: oggi mancante; generare un'immagine social con nome + tagline così i link condivisi non sono anonimi.
-- **Meta description**: attualmente generica ("Bilingual academic portfolio…"). Sostituire con lo statement d'apertura.
-
-## 6. Fuori scope (menziono, non faccio ora)
-
-- Route dedicate `/projects/:slug` con caso studio lungo (utile quando avrai 4+ progetti seri).
-- Sezione "Reading list" / "Currently thinking about" — molto da researcher, ma richiede manutenzione continua.
-- Animazione al primo caricamento sul nome (reveal lettera per lettera) — carino ma da fare solo se il resto convince.
+Non aggiungo Termini di Servizio: non vendi/offri servizi contrattuali, non serve. Se in futuro accetterai commissioni o mailing list, li aggiungiamo.
 
 ---
 
-## Cosa mi serve da te
+## Dettagli tecnici
 
-Rispondi in libertà, non serve punto per punto:
+**File modificati:**
 
-1. Ti piace l'idea dei **chapter markers** + statement d'apertura, o preferisci restare più sobria? 
-  si mi piace
-2. Riscrivo la **bio** in versione narrativa (3 paragrafi asciutti)? si
-3. Aggiungo la sezione **"Research directions"** con 3–4 domande aperte? Se sì, le scrivo io in prima bozza e tu correggi. va bene
-4. Publications: opzione (a) nascondi finché vuota, o (b) rinomina "Writing" e includi tesi? meglio inserire la tesi in writing
-5. Social del footer: dammi gli URL veri (Scholar/GitHub/ORCID/X/LinkedIn) o li tolgo. ancora non li ho... tienili vuoti per ora
+- `src/components/site/Footer.tsx` — rimozione colophon, aggiunta link legali
+- `src/lib/i18n.tsx` — rimozione `footerColophon`, aggiunta `navPrivacy`/`navCookies`
+- `.env` — nuove credenziali Supabase
 
-Appena mi confermi, aggiorno il piano con l'elenco preciso dei file da toccare e passiamo a build.
+**File nuovi:**
+
+- `src/routes/privacy.tsx`
+- `src/routes/cookies.tsx`
+- `public/projects-cover/README.md`
+
+**File eliminati:**
+
+- `src/assets/il-bel-paese.svg.asset.json`
+- `src/assets/logo-oracolo.svg.asset.json`
+- - delete dei rispettivi asset CDN via `lovable-assets delete`
+
+**Modifiche DB (migrazione Supabase):**
+
+- `UPDATE projects SET cover_url = '/projects-cover/...'` sui due record esistenti
+
+**Verifica finale:** `bun run build` deve passare; controllo che i due loghi si vedano ancora in Projects e che `/privacy` e `/cookies` renderizzino in EN e IT.
+
+Mancano i link ai profili "social" e accademici. inseriscili e poi li completerò in una fase successiva
