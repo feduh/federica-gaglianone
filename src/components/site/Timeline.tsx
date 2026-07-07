@@ -1,13 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/i18n";
-import { timeline } from "@/lib/profile";
+import { profile as fallback } from "@/lib/profile";
+import { supabase } from "@/integrations/supabase/client";
+import type { TimelineRow } from "@/lib/cms-types";
+
+// Fallback shape derived from static profile.ts
+const fallbackRows: TimelineRow[] = fallback ? [] : [];
+// Actually build from timeline:
+import { timeline as staticTimeline } from "@/lib/profile";
+const staticFallback: TimelineRow[] = staticTimeline.map((t, i) => ({
+  id: `static-${i}`,
+  year: parseInt(String(t.year).split("-")[0], 10) || 0,
+  title_it: `${t.institution_it} — ${t.year}`,
+  title_en: `${t.institution_en} — ${t.year}`,
+  body_it: t.body_it,
+  body_en: t.body_en,
+  sort_order: i,
+}));
+void fallbackRows;
 
 export function Timeline() {
   const { lang, t } = useLang();
-  // Chronological ascending: reads as a story from the beginning.
-  // Default to the most recent (last) entry.
-  const [active, setActive] = useState<number | null>(timeline.length - 1);
-  const current = active !== null ? timeline[active] : null;
+  const [rows, setRows] = useState<TimelineRow[]>(staticFallback);
+  const [active, setActive] = useState<number>(staticFallback.length - 1);
+
+  useEffect(() => {
+    supabase.from("timeline_entries").select("*").order("sort_order").then(({ data }) => {
+      if (data && data.length > 0) {
+        setRows(data as TimelineRow[]);
+        setActive(data.length - 1);
+      }
+    });
+  }, []);
+
+  const current = rows[active] ?? null;
 
   return (
     <section id="timeline" className="border-t-2 border-foreground py-24 md:py-32">
@@ -18,13 +44,13 @@ export function Timeline() {
           <span className="font-pixel text-sm text-muted-foreground">→ {t("timelineHint")}</span>
         </div>
 
-        {/* Grid of years — chronological */}
         <div className="grid grid-cols-2 md:grid-cols-5 border-2 border-foreground">
-          {timeline.map((item, i) => {
+          {rows.map((item, i) => {
             const isActive = active === i;
+            const title = lang === "en" ? item.title_en : item.title_it;
             return (
               <button
-                key={item.year}
+                key={item.id}
                 data-cursor="link"
                 onMouseEnter={() => setActive(i)}
                 onFocus={() => setActive(i)}
@@ -34,27 +60,22 @@ export function Timeline() {
                 }`}
               >
                 <div className="font-pixel text-2xl md:text-4xl leading-none">{item.year}</div>
-                <div className="font-pixel text-[11px] mt-3 opacity-80">
-                  {lang === "en" ? item.institution_en : item.institution_it}
-                </div>
-                <div className="font-body text-xs italic mt-3 opacity-70 leading-snug">
-                  {lang === "en" ? item.caption_en : item.caption_it}
+                <div className="font-pixel text-[11px] mt-3 opacity-80 line-clamp-2">
+                  {title}
                 </div>
               </button>
             );
           })}
         </div>
 
-        {/* Detail panel */}
         <div className="mt-8 grid grid-cols-12 gap-4 min-h-[120px]">
           {current && (
             <>
               <div className="col-span-12 md:col-span-3">
-                <p className="font-pixel text-sm text-muted-foreground">▸ INSTITUTION</p>
+                <p className="font-pixel text-sm text-muted-foreground">▸ TITLE</p>
                 <p className="font-display text-2xl md:text-3xl mt-2">
-                  {lang === "en" ? current.institution_en : current.institution_it}
+                  {lang === "en" ? current.title_en : current.title_it}
                 </p>
-                <p className="font-pixel text-sm mt-2">{current.place}</p>
               </div>
               <div className="col-span-12 md:col-span-7 md:col-start-5">
                 <p className="font-pixel text-sm text-muted-foreground">▸ DETAILS</p>
