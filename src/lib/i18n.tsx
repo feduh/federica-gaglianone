@@ -5,6 +5,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export type Lang = "en" | "it";
 
@@ -20,7 +21,6 @@ const dict = {
   navProjects: { en: "Projects", it: "Progetti" },
   navResearch: { en: "Directions", it: "Direzioni" },
   navContact: { en: "Contact", it: "Contatti" },
-  // Chapter markers — the narrative arc across the page.
   chapter01: { en: "Ch. 01 — Where I come from", it: "Cap. 01 — Da dove vengo" },
   chapter02: { en: "Ch. 02 — What I've written", it: "Cap. 02 — Cosa ho scritto" },
   chapter03: { en: "Ch. 03 — What I've built", it: "Cap. 03 — Cosa ho costruito" },
@@ -52,7 +52,6 @@ const dict = {
   cookiesTitle: { en: "Cookie Policy", it: "Informativa sui cookie" },
   legalBack: { en: "← Back home", it: "← Torna alla home" },
   legalUpdated: { en: "Last updated", it: "Ultimo aggiornamento" },
-
 } satisfies Dict;
 
 type Key = keyof typeof dict;
@@ -70,10 +69,25 @@ const STORAGE_KEY = "portfolio.lang";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
+  const [overrides, setOverrides] = useState<Dict>({});
 
   useEffect(() => {
     const stored = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
     if (stored === "en" || stored === "it") setLangState(stored);
+  }, []);
+
+  useEffect(() => {
+    // Load UI strings from DB (client-side, non-blocking) and merge over defaults
+    supabase.from("ui_strings").select("key, value_it, value_en").then(({ data }) => {
+      if (!data) return;
+      const map: Dict = {};
+      for (const row of data) {
+        if (row.value_it || row.value_en) {
+          map[row.key] = { it: row.value_it || "", en: row.value_en || "" };
+        }
+      }
+      setOverrides(map);
+    });
   }, []);
 
   const setLang = (l: Lang) => {
@@ -86,7 +100,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     lang,
     setLang,
     toggle: () => setLang(lang === "en" ? "it" : "en"),
-    t: (k) => dict[k][lang],
+    t: (k) => {
+      const o = overrides[k];
+      if (o && o[lang]) return o[lang];
+      return dict[k][lang];
+    },
   };
 
   return <LangContext.Provider value={value}>{children}</LangContext.Provider>;
