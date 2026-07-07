@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      profile: {
+        Row: {
+          avatar_url: string | null
+          bio_en: string
+          bio_it: string
+          city: string
+          email: string
+          id: string
+          interests: Json
+          name: string
+          role: string
+          seeking_en: string
+          seeking_it: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio_en?: string
+          bio_it?: string
+          city?: string
+          email?: string
+          id?: string
+          interests?: Json
+          name?: string
+          role?: string
+          seeking_en?: string
+          seeking_it?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio_en?: string
+          bio_it?: string
+          city?: string
+          email?: string
+          id?: string
+          interests?: Json
+          name?: string
+          role?: string
+          seeking_en?: string
+          seeking_it?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       project_tags: {
         Row: {
           project_id: string
@@ -164,6 +209,69 @@ export type Database = {
         }
         Relationships: []
       }
+      research_directions: {
+        Row: {
+          body_en: string
+          body_it: string
+          created_at: string
+          id: string
+          sort_order: number
+          title_en: string
+          title_it: string
+          updated_at: string
+        }
+        Insert: {
+          body_en?: string
+          body_it?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          title_en?: string
+          title_it?: string
+          updated_at?: string
+        }
+        Update: {
+          body_en?: string
+          body_it?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          title_en?: string
+          title_it?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      socials: {
+        Row: {
+          created_at: string
+          href: string
+          id: string
+          label: string
+          sort_order: number
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          created_at?: string
+          href?: string
+          id?: string
+          label: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          created_at?: string
+          href?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       tags: {
         Row: {
           created_at: string
@@ -188,15 +296,99 @@ export type Database = {
         }
         Relationships: []
       }
+      timeline_entries: {
+        Row: {
+          body_en: string
+          body_it: string
+          created_at: string
+          id: string
+          sort_order: number
+          title_en: string
+          title_it: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          body_en?: string
+          body_it?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          title_en?: string
+          title_it?: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          body_en?: string
+          body_it?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+          title_en?: string
+          title_it?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      ui_strings: {
+        Row: {
+          key: string
+          updated_at: string
+          value_en: string
+          value_it: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value_en?: string
+          value_it?: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value_en?: string
+          value_it?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -323,6 +515,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin"],
+    },
   },
 } as const
