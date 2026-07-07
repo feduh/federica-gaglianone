@@ -24,14 +24,17 @@ function ProfileEditor() {
   useEffect(() => {
     supabase.from("profile").select("*").limit(1).maybeSingle().then(({ data }) => {
       if (data) {
+        const interests: string[] = Array.isArray(data.interests)
+          ? (data.interests as unknown[]).filter((v): v is string => typeof v === "string")
+          : [];
         setState({
           id: data.id, name: data.name, role: data.role, email: data.email, city: data.city,
           bio_it: data.bio_it, bio_en: data.bio_en,
           seeking_it: data.seeking_it, seeking_en: data.seeking_en,
-          interests: Array.isArray(data.interests) ? data.interests : [],
+          interests,
           avatar_url: data.avatar_url,
         });
-        setInterestsRaw((Array.isArray(data.interests) ? data.interests : []).join(", "));
+        setInterestsRaw(interests.join(", "));
       }
       setLoading(false);
     });
