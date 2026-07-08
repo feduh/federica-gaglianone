@@ -6,6 +6,24 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   component: Dashboard,
 });
 
+type Card = {
+  to: string;
+  title: string;
+  desc: string;
+  icon: string;
+  group: "Identità" | "Contenuti" | "Testi";
+};
+
+const cards: Card[] = [
+  { to: "/admin/profile", title: "Profilo", desc: "Nome, bio, seeking, interessi, avatar", icon: "◉", group: "Identità" },
+  { to: "/admin/socials", title: "Socials & Footer", desc: "Scholar, GitHub, OrcID, LinkedIn…", icon: "↗", group: "Identità" },
+  { to: "/admin/timeline", title: "Timeline", desc: "Tappe accademiche e professionali", icon: "▤", group: "Contenuti" },
+  { to: "/admin/research", title: "Ricerca", desc: "Domande aperte e direzioni di ricerca", icon: "?", group: "Contenuti" },
+  { to: "/admin/publications", title: "Pubblicazioni", desc: "Paper, DOI, abstract, tag", icon: "§", group: "Contenuti" },
+  { to: "/admin/projects", title: "Progetti", desc: "Cover, link, descrizioni, tag", icon: "▣", group: "Contenuti" },
+  { to: "/admin/ui", title: "Testi UI", desc: "Etichette, bottoni, capitoli (IT / EN)", icon: "Aa", group: "Testi" },
+];
+
 function Dashboard() {
   const [email, setEmail] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -22,50 +40,77 @@ function Dashboard() {
     });
   }, []);
 
+  const groups = ["Identità", "Contenuti", "Testi"] as const;
+
   return (
-    <div className="space-y-8">
-      <div>
-        <p className="font-pixel text-xs text-muted-foreground">◆ WELCOME</p>
-        <h1 className="font-display text-5xl mt-2">Site manager</h1>
-        <p className="font-body text-lg mt-4 text-muted-foreground max-w-2xl">
-          Modifica tutti i contenuti del sito da qui. Le modifiche sono <em>live</em>: appena
-          salvi, il sito pubblico si aggiorna.
+    <div className="space-y-12">
+      {/* Hero */}
+      <header className="space-y-4">
+        <p className="font-pixel text-xs text-accent tracking-widest">◆ BENVENUTA</p>
+        <h1 className="font-display text-6xl md:text-7xl leading-[0.9]">
+          Site <span className="italic text-accent">manager</span>
+        </h1>
+        <p className="font-body text-lg text-muted-foreground max-w-2xl leading-relaxed">
+          Modifica tutti i contenuti del sito da qui. Le modifiche sono{" "}
+          <span className="text-accent font-medium not-italic">live</span>: appena salvi,
+          il sito pubblico si aggiorna automaticamente.
         </p>
-      </div>
+      </header>
 
-      <div className="border-2 border-foreground p-4">
-        <p className="font-pixel text-xs text-muted-foreground">SIGNED IN</p>
-        <p className="font-body mt-1">{email ?? "…"}</p>
-        {isAdmin === false && (
-          <p className="font-pixel text-xs text-destructive mt-2">
-            ⚠ Your account is signed in but does NOT have the admin role. Contact the site owner.
-          </p>
-        )}
+      {/* Status */}
+      <div className="border-2 border-foreground p-5 flex flex-wrap items-center justify-between gap-4 bg-card/40">
+        <div>
+          <p className="font-pixel text-[10px] text-muted-foreground tracking-widest">ACCESSO ATTIVO</p>
+          <p className="font-body text-base mt-1">{email ?? "…"}</p>
+        </div>
         {isAdmin === true && (
-          <p className="font-pixel text-xs text-accent mt-2">✓ Admin role active</p>
+          <span className="font-pixel text-xs px-3 py-2 bg-accent text-accent-foreground border-2 border-accent">
+            ✓ RUOLO ADMIN
+          </span>
+        )}
+        {isAdmin === false && (
+          <span className="font-pixel text-xs px-3 py-2 bg-destructive text-destructive-foreground border-2 border-destructive">
+            ⚠ RUOLO NON ATTIVO
+          </span>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {[
-          ["/admin/profile", "Profile", "Bio, seeking, interests, avatar"],
-          ["/admin/socials", "Socials & Footer", "Scholar, GitHub, OrcID…"],
-          ["/admin/ui", "UI strings", "Navigation, buttons, chapters"],
-          ["/admin/timeline", "Timeline", "Academic journey entries"],
-          ["/admin/research", "Research directions", "Open questions"],
-          ["/admin/publications", "Publications", "Papers, DOIs, abstracts"],
-          ["/admin/projects", "Projects", "Cover images, links"],
-        ].map(([to, title, desc]) => (
-          <Link
-            key={to}
-            to={to}
-            className="border-2 border-foreground p-4 hover:bg-foreground hover:text-background transition-colors block"
-          >
-            <p className="font-display text-2xl">{title}</p>
-            <p className="font-pixel text-xs mt-2 opacity-80">{desc}</p>
-          </Link>
-        ))}
-      </div>
+      {/* Grouped sections */}
+      {groups.map((group, gi) => {
+        const items = cards.filter((c) => c.group === group);
+        return (
+          <section key={group} className="space-y-4">
+            <div className="flex items-baseline gap-4">
+              <span className="font-pixel text-xs text-accent">§ 0{gi + 1}</span>
+              <h2 className="font-display text-3xl">{group}</h2>
+              <span className="flex-1 border-b-2 border-foreground/20 translate-y-[-4px]" />
+              <span className="font-pixel text-xs text-muted-foreground">
+                {items.length} {items.length === 1 ? "sezione" : "sezioni"}
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {items.map((c) => (
+                <Link
+                  key={c.to}
+                  to={c.to}
+                  className="group border-2 border-foreground p-5 flex gap-4 items-start hover:bg-accent hover:text-accent-foreground hover:border-accent hover:shadow-[4px_4px_0_0_var(--color-foreground)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all"
+                >
+                  <span className="font-display text-4xl leading-none text-accent group-hover:text-accent-foreground w-10 text-center">
+                    {c.icon}
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-display text-2xl leading-tight">{c.title}</p>
+                    <p className="font-body text-sm mt-1 text-muted-foreground group-hover:text-accent-foreground/80">
+                      {c.desc}
+                    </p>
+                  </div>
+                  <span className="font-pixel text-lg opacity-40 group-hover:opacity-100">→</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }
