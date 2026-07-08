@@ -75,9 +75,7 @@ function AdminLayout() {
                     }}
                     className="font-pixel text-sm border-2 border-foreground/30 px-3 py-2 flex items-center gap-3 hover:border-foreground hover:bg-foreground hover:text-background transition-all"
                   >
-                    <span className="w-5 text-center text-accent [.\\!bg-accent_&]:text-accent-foreground">
-                      {s.icon}
-                    </span>
+                    <span className="w-5 text-center opacity-70">{s.icon}</span>
                     <span>{s.label}</span>
                   </Link>
                 ))}
