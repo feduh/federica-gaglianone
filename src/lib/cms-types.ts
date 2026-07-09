@@ -28,9 +28,12 @@ export type UiStringRow = {
 
 export type TimelineRow = {
   id: string;
-  year: number;
-  title_it: string;
-  title_en: string;
+  year_from: number;
+  year_to: number | null;
+  course_it: string;
+  course_en: string;
+  institution_it: string;
+  institution_en: string;
   body_it: string;
   body_en: string;
   sort_order: number;

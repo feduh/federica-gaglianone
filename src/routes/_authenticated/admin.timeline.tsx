@@ -30,12 +30,21 @@ function TimelineEditor() {
     try { await save({ data: row }); toast.success("Saved"); load(); } catch (e: any) { toast.error(e.message); }
   }
   async function deleteRow(row: TimelineRow) {
-    if (!confirm(`Delete ${row.title_en || row.year}?`)) return;
+    if (!confirm(`Delete ${row.course_en || row.year_from}?`)) return;
     try { await del({ data: { id: row.id } }); toast.success("Deleted"); load(); } catch (e: any) { toast.error(e.message); }
   }
   async function addNew() {
     const nextOrder = Math.max(0, ...rows.map((r) => r.sort_order)) + 1;
-    try { await save({ data: { year: new Date().getFullYear(), title_it: "", title_en: "", body_it: "", body_en: "", sort_order: nextOrder } }); load(); } catch (e: any) { toast.error(e.message); }
+    const y = new Date().getFullYear();
+    try {
+      await save({ data: {
+        year_from: y, year_to: y,
+        course_it: "", course_en: "",
+        institution_it: "", institution_en: "",
+        body_it: "", body_en: "", sort_order: nextOrder,
+      }});
+      load();
+    } catch (e: any) { toast.error(e.message); }
   }
 
   if (loading) return <p className="font-pixel">Loading…</p>;
@@ -53,10 +62,36 @@ function TimelineEditor() {
         {rows.map((row, i) => (
           <div key={row.id} className="border-2 border-foreground p-4 space-y-3">
             <div className="grid grid-cols-6 gap-3">
-              <div className="col-span-1"><label className={lab}>YEAR</label><input type="number" className={inp} value={row.year} onChange={(e) => update(i, { year: Number(e.target.value) })} /></div>
-              <div className="col-span-1"><label className={lab}>ORDER</label><input type="number" className={inp} value={row.sort_order} onChange={(e) => update(i, { sort_order: Number(e.target.value) })} /></div>
-              <div className="col-span-2"><label className={lab}>TITLE (IT)</label><input className={inp} value={row.title_it} onChange={(e) => update(i, { title_it: e.target.value })} /></div>
-              <div className="col-span-2"><label className={lab}>TITLE (EN)</label><input className={inp} value={row.title_en} onChange={(e) => update(i, { title_en: e.target.value })} /></div>
+              <div className="col-span-1">
+                <label className={lab}>YEAR FROM</label>
+                <input type="number" className={inp} value={row.year_from}
+                  onChange={(e) => update(i, { year_from: Number(e.target.value) })} />
+              </div>
+              <div className="col-span-1">
+                <label className={lab}>YEAR TO</label>
+                <input type="number" placeholder="—" className={inp}
+                  value={row.year_to ?? ""}
+                  onChange={(e) => update(i, { year_to: e.target.value === "" ? null : Number(e.target.value) })} />
+              </div>
+              <div className="col-span-1">
+                <label className={lab}>ORDER</label>
+                <input type="number" className={inp} value={row.sort_order}
+                  onChange={(e) => update(i, { sort_order: Number(e.target.value) })} />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div><label className={lab}>COURSE (IT)</label>
+                <input className={inp} value={row.course_it}
+                  onChange={(e) => update(i, { course_it: e.target.value })} /></div>
+              <div><label className={lab}>COURSE (EN)</label>
+                <input className={inp} value={row.course_en}
+                  onChange={(e) => update(i, { course_en: e.target.value })} /></div>
+              <div><label className={lab}>INSTITUTION (IT)</label>
+                <input className={inp} value={row.institution_it}
+                  onChange={(e) => update(i, { institution_it: e.target.value })} /></div>
+              <div><label className={lab}>INSTITUTION (EN)</label>
+                <input className={inp} value={row.institution_en}
+                  onChange={(e) => update(i, { institution_en: e.target.value })} /></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div><label className={lab}>BODY (IT)</label><textarea rows={4} className={inp} value={row.body_it} onChange={(e) => update(i, { body_it: e.target.value })} /></div>
