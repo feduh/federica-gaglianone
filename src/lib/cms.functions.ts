@@ -63,7 +63,7 @@ export const getTimelineEntries = createServerFn({ method: "GET" }).handler(asyn
   const supabase = serverClient();
   const { data, error } = await supabase
     .from("timeline_entries")
-    .select("id, year, title_it, title_en, body_it, body_en, sort_order")
+    .select("id, year_from, year_to, course_it, course_en, institution_it, institution_en, body_it, body_en, sort_order")
     .order("sort_order", { ascending: true });
   if (error) {
     console.error("[getTimelineEntries]", error);
