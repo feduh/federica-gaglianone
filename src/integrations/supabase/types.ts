@@ -300,35 +300,44 @@ export type Database = {
         Row: {
           body_en: string
           body_it: string
+          course_en: string
+          course_it: string
           created_at: string
           id: string
+          institution_en: string
+          institution_it: string
           sort_order: number
-          title_en: string
-          title_it: string
           updated_at: string
-          year: number
+          year_from: number
+          year_to: number | null
         }
         Insert: {
           body_en?: string
           body_it?: string
+          course_en?: string
+          course_it?: string
           created_at?: string
           id?: string
+          institution_en?: string
+          institution_it?: string
           sort_order?: number
-          title_en?: string
-          title_it?: string
           updated_at?: string
-          year: number
+          year_from: number
+          year_to?: number | null
         }
         Update: {
           body_en?: string
           body_it?: string
+          course_en?: string
+          course_it?: string
           created_at?: string
           id?: string
+          institution_en?: string
+          institution_it?: string
           sort_order?: number
-          title_en?: string
-          title_it?: string
           updated_at?: string
-          year?: number
+          year_from?: number
+          year_to?: number | null
         }
         Relationships: []
       }
