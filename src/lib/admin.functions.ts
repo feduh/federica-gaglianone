@@ -70,13 +70,18 @@ export const upsertUiString = createServerFn({ method: "POST" })
 export const upsertTimeline = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: any) => d as {
-    id?: string; year: number; title_it: string; title_en: string;
+    id?: string;
+    year_from: number; year_to: number | null;
+    course_it: string; course_en: string;
+    institution_it: string; institution_en: string;
     body_it: string; body_en: string; sort_order: number;
   })
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
     const payload = {
-      year: data.year, title_it: data.title_it, title_en: data.title_en,
+      year_from: data.year_from, year_to: data.year_to,
+      course_it: data.course_it, course_en: data.course_en,
+      institution_it: data.institution_it, institution_en: data.institution_en,
       body_it: data.body_it, body_en: data.body_en, sort_order: data.sort_order,
     };
     const { error } = data.id
