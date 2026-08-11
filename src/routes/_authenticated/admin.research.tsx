@@ -72,7 +72,7 @@ function ResearchEditor() {
           </div>
         )}
       />
-      </div>
+
     </div>
   );
 }
