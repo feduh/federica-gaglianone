@@ -42,7 +42,8 @@ function MediaLibrary() {
         fr.onerror = reject;
         fr.readAsDataURL(file);
       });
-      await upload({ data: { folder, filename: file.name, contentType: file.type || "application/octet-stream", base64: b64 } });
+      const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+      await upload({ data: { path: `${folder}/${Date.now()}-${safe}`, contentType: file.type || "application/octet-stream", base64: b64 } });
       toast.success("Caricato");
       load();
     } catch (e: any) {
