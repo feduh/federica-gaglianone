@@ -4,11 +4,23 @@ import { useLang } from "@/lib/i18n";
 import type { Project, Tag } from "@/lib/portfolio-types";
 import { TagFilter } from "./TagFilter";
 import { PixelButton } from "./PixelButton";
+import { useReveal } from "@/lib/useReveal";
 
-export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
+export function Projects({
+  items,
+  tags,
+  activeTags,
+  onTagsChange,
+}: {
+  items: Project[];
+  tags: Tag[];
+  activeTags: string[];
+  onTagsChange: (slugs: string[]) => void;
+}) {
   const { lang, t } = useLang();
-  const [active, setActive] = useState<Set<string>>(new Set());
+  const active = useMemo(() => new Set(activeTags), [activeTags]);
   const [open, setOpen] = useState<string | null>(null);
+  const reveal = useReveal<HTMLDivElement>();
 
   const filtered = useMemo(() => {
     if (active.size === 0) return items;
@@ -20,6 +32,13 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
     items.forEach((p) => p.tags.forEach((t) => slugs.add(t.slug)));
     return tags.filter((t) => slugs.has(t.slug));
   }, [items, tags]);
+
+  const toggle = (slug: string) => {
+    const next = new Set(active);
+    if (next.has(slug)) next.delete(slug);
+    else next.add(slug);
+    onTagsChange([...next]);
+  };
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
@@ -65,7 +84,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
 
   return (
     <section id="projects" className="border-t-2 border-foreground py-24 md:py-32">
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8">
+      <div ref={reveal.ref} style={reveal.style} className={`mx-auto max-w-[1600px] px-4 md:px-8 ${reveal.className}`}>
         <p className="font-pixel text-sm text-muted-foreground mb-4">{t("chapter03")}</p>
         <div className="flex items-end justify-between gap-6 mb-12 flex-wrap">
           <h2 className="font-display text-5xl md:text-7xl text-accent">{t("projectsTitle")}</h2>
@@ -73,19 +92,19 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
             <div className="flex gap-2">
               <button
                 data-cursor="link"
-                aria-label="Previous project"
+                aria-label={lang === "en" ? "Previous project" : "Progetto precedente"}
                 onClick={scrollPrev}
                 disabled={!canPrev}
-                className="font-pixel text-sm border-2 border-foreground px-3 py-2 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="font-pixel text-sm border-2 border-foreground px-3 min-h-11 hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 ← PREV
               </button>
               <button
                 data-cursor="link"
-                aria-label="Next project"
+                aria-label={lang === "en" ? "Next project" : "Progetto successivo"}
                 onClick={scrollNext}
                 disabled={!canNext}
-                className="font-pixel text-sm border-2 border-foreground px-3 py-2 hover:bg-accent hover:text-accent-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="font-pixel text-sm border-2 border-foreground px-3 min-h-11 hover:bg-accent hover:text-accent-foreground disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
                 NEXT →
               </button>
@@ -93,27 +112,25 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
           )}
         </div>
         <TagFilter
+          label={t("projectsTitle")}
           tags={usedTags}
           active={active}
-          onToggle={(slug) => {
-            const next = new Set(active);
-            if (next.has(slug)) next.delete(slug);
-            else next.add(slug);
-            setActive(next);
-          }}
-          onClear={() => setActive(new Set())}
+          onToggle={toggle}
+          onClear={() => onTagsChange([])}
         />
 
         {filtered.length === 0 ? (
-          <p className="font-pixel text-muted-foreground py-12">{t("emptyResults")}</p>
+          <p className="font-pixel text-muted-foreground py-12" role="status">
+            {t("emptyResults")}
+          </p>
         ) : (
           <div
             ref={emblaRef}
             tabIndex={0}
             role="region"
-            aria-label="Projects carousel"
+            aria-label={lang === "en" ? "Projects carousel" : "Carosello progetti"}
             onKeyDown={onKeyDown}
-            className="overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="overflow-hidden outline-none"
           >
             <div className="flex items-start gap-4">
               {filtered.map((p, idx) => {
@@ -124,7 +141,8 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                 return (
                   <article
                     key={p.id}
-                    className={`bg-background border-2 p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)] ${isOpen ? "min-h-[34rem] md:min-h-[36rem] card-expanded" : "h-[34rem] md:h-[36rem] overflow-hidden border-foreground"}`}
+                    id={`proj-${p.id}`}
+                    className={`scroll-mt-28 bg-background border-2 p-6 md:p-10 flex flex-col self-start shrink-0 grow-0 basis-full md:basis-[calc(50%-0.5rem)] transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0_0_var(--color-accent)] ${isOpen ? "min-h-[34rem] md:min-h-[36rem] card-expanded" : "h-[34rem] md:h-[36rem] overflow-hidden border-foreground"}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <span className="font-pixel text-xs text-muted-foreground">
@@ -145,7 +163,9 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       {p.cover_url && (
                         <img
                           src={p.cover_url}
-                          alt=""
+                          alt={`${title} — logo`}
+                          loading="lazy"
+                          decoding="async"
                           className="w-14 h-14 md:w-20 md:h-20 object-contain shrink-0"
                         />
                       )}
@@ -159,7 +179,7 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       </p>
                     )}
                     {isOpen && body && (
-                      <p className="font-body text-base mt-4 leading-relaxed border-t-2 border-foreground pt-4">
+                      <p className="font-body text-base mt-4 leading-relaxed border-t-2 border-foreground pt-4 animate-in fade-in duration-300">
                         {body}
                       </p>
                     )}
@@ -167,7 +187,8 @@ export function Projects({ items, tags }: { items: Project[]; tags: Tag[] }) {
                       <button
                         data-cursor="link"
                         onClick={() => setOpen(isOpen ? null : p.id)}
-                        className="font-pixel text-sm underline underline-offset-4 hover:text-accent"
+                        aria-expanded={isOpen}
+                        className="font-pixel text-sm underline underline-offset-4 hover:text-accent min-h-11 inline-flex items-center"
                       >
                         {isOpen ? `− ${t("collapse")}` : `+ ${t("expand")}`}
                       </button>
