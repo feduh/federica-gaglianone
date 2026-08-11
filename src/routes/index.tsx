@@ -9,12 +9,19 @@ import { Publications } from "@/components/site/Publications";
 import { Projects } from "@/components/site/Projects";
 import { ResearchDirections } from "@/components/site/ResearchDirections";
 import { Footer } from "@/components/site/Footer";
+import { CommandPalette } from "@/components/site/CommandPalette";
 
 const tagsQ = queryOptions({ queryKey: ["tags"], queryFn: () => getTags() });
 const pubsQ = queryOptions({ queryKey: ["publications"], queryFn: () => getPublications() });
 const projsQ = queryOptions({ queryKey: ["projects"], queryFn: () => getProjects() });
 
+type HomeSearch = { w?: string; p?: string };
+
 export const Route = createFileRoute("/")({
+  validateSearch: (search: Record<string, unknown>): HomeSearch => ({
+    w: typeof search["w"] === "string" && search["w"] ? String(search["w"]) : undefined,
+    p: typeof search["p"] === "string" && search["p"] ? String(search["p"]) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: `${profile.name} — ${profile.role_en}` },
@@ -75,19 +82,44 @@ export const Route = createFileRoute("/")({
   ),
 });
 
+function parseTags(v?: string) {
+  return v ? v.split(",").filter(Boolean) : [];
+}
+
 function HomePage() {
   const tags = useSuspenseQuery(tagsQ).data;
   const publications = useSuspenseQuery(pubsQ).data;
   const projects = useSuspenseQuery(projsQ).data;
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+
+  const setParam = (key: "w" | "p", slugs: string[]) => {
+    navigate({
+      search: (prev: HomeSearch) => ({ ...prev, [key]: slugs.length ? slugs.join(",") : undefined }),
+      replace: true,
+      resetScroll: false,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <TopBar />
+      <CommandPalette publications={publications} projects={projects} />
       <main id="main" tabIndex={-1}>
         <IntroAsymmetric />
         <Timeline />
-        <Publications items={publications} tags={tags} />
-        <Projects items={projects} tags={tags} />
+        <Publications
+          items={publications}
+          tags={tags}
+          activeTags={parseTags(search.w)}
+          onTagsChange={(s) => setParam("w", s)}
+        />
+        <Projects
+          items={projects}
+          tags={tags}
+          activeTags={parseTags(search.p)}
+          onTagsChange={(s) => setParam("p", s)}
+        />
         <ResearchDirections />
       </main>
       <Footer />
