@@ -3,11 +3,23 @@ import { useLang } from "@/lib/i18n";
 import type { Publication, Tag } from "@/lib/portfolio-types";
 import { TagFilter } from "./TagFilter";
 import { PixelButton } from "./PixelButton";
+import { useReveal } from "@/lib/useReveal";
 
-export function Publications({ items, tags }: { items: Publication[]; tags: Tag[] }) {
+export function Publications({
+  items,
+  tags,
+  activeTags,
+  onTagsChange,
+}: {
+  items: Publication[];
+  tags: Tag[];
+  activeTags: string[];
+  onTagsChange: (slugs: string[]) => void;
+}) {
   const { lang, t } = useLang();
-  const [active, setActive] = useState<Set<string>>(new Set());
+  const active = useMemo(() => new Set(activeTags), [activeTags]);
   const [open, setOpen] = useState<string | null>(null);
+  const reveal = useReveal<HTMLDivElement>();
 
   const filtered = useMemo(() => {
     if (active.size === 0) return items;
@@ -20,25 +32,30 @@ export function Publications({ items, tags }: { items: Publication[]; tags: Tag[
     return tags.filter((t) => slugs.has(t.slug));
   }, [items, tags]);
 
+  const toggle = (slug: string) => {
+    const next = new Set(active);
+    if (next.has(slug)) next.delete(slug);
+    else next.add(slug);
+    onTagsChange([...next]);
+  };
+
   return (
     <section id="publications" className="border-t-2 border-foreground py-24 md:py-32">
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8">
+      <div ref={reveal.ref} style={reveal.style} className={`mx-auto max-w-[1600px] px-4 md:px-8 ${reveal.className}`}>
         <p className="font-pixel text-sm text-muted-foreground mb-4">{t("chapter02")}</p>
         <h2 className="font-display text-5xl md:text-7xl mb-12 text-accent">{t("publicationsTitle")}</h2>
         <TagFilter
+          label={t("publicationsTitle")}
           tags={usedTags}
           active={active}
-          onToggle={(slug) => {
-            const next = new Set(active);
-            if (next.has(slug)) next.delete(slug);
-            else next.add(slug);
-            setActive(next);
-          }}
-          onClear={() => setActive(new Set())}
+          onToggle={toggle}
+          onClear={() => onTagsChange([])}
         />
 
         {filtered.length === 0 ? (
-          <p className="font-pixel text-muted-foreground py-12">{t("emptyResults")}</p>
+          <p className="font-pixel text-muted-foreground py-12" role="status">
+            {t("emptyResults")}
+          </p>
         ) : (
           <ul className="border-t-2 border-foreground">
             {filtered.map((p, idx) => {
@@ -46,18 +63,19 @@ export function Publications({ items, tags }: { items: Publication[]; tags: Tag[
               const title = lang === "en" ? p.title_en : p.title_it;
               const abstract = lang === "en" ? p.abstract_en : p.abstract_it;
               return (
-                <li key={p.id} className="border-b-2 border-foreground">
+                <li key={p.id} id={`pub-${p.id}`} className="border-b-2 border-foreground scroll-mt-28">
                   <button
                     data-cursor="link"
                     onClick={() => setOpen(isOpen ? null : p.id)}
                     className="w-full text-left py-8 grid grid-cols-12 gap-4 items-baseline group hover:bg-foreground/5 transition-colors px-2"
                     aria-expanded={isOpen}
+                    aria-controls={`pub-panel-${p.id}`}
                   >
                     <span className="col-span-2 md:col-span-1 font-pixel text-lg md:text-2xl text-muted-foreground">
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                     <span className="col-span-10 md:col-span-8">
-                      <span className="block font-display text-3xl md:text-5xl leading-[0.95]">
+                      <span className="block font-display text-3xl md:text-5xl leading-[0.95] group-hover:text-accent transition-colors">
                         {title}
                       </span>
                       <span className="block font-pixel text-xs md:text-sm text-muted-foreground mt-3">
@@ -68,12 +86,12 @@ export function Publications({ items, tags }: { items: Publication[]; tags: Tag[
                     <span className="hidden md:block col-span-2 font-pixel text-2xl text-right">
                       {p.year}
                     </span>
-                    <span className="col-span-12 md:col-span-1 font-pixel text-2xl text-right">
+                    <span className="col-span-12 md:col-span-1 font-pixel text-2xl text-right" aria-hidden>
                       {isOpen ? "−" : "+"}
                     </span>
                   </button>
                   {isOpen && (
-                    <div className="px-2 pb-10 grid grid-cols-12 gap-4">
+                    <div id={`pub-panel-${p.id}`} className="px-2 pb-10 grid grid-cols-12 gap-4 animate-in fade-in duration-300">
                       <div className="col-span-12 md:col-span-8 md:col-start-2">
                         {abstract && (
                           <p className="font-body text-lg leading-relaxed mb-6">{abstract}</p>

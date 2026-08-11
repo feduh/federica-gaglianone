@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { upsertResearch, deleteResearch } from "@/lib/admin.functions";
 import type { ResearchRow } from "@/lib/cms-types";
+import { SortableList } from "@/components/admin/SortableList";
 
 export const Route = createFileRoute("/_authenticated/admin/research")({
   component: ResearchEditor,
@@ -23,6 +24,9 @@ function ResearchEditor() {
   }
   useEffect(() => { load(); }, []);
 
+  function updateById(id: string, patch: Partial<ResearchRow>) {
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+  }
   function update(i: number, patch: Partial<ResearchRow>) {
     setRows((rs) => rs.map((r, j) => j === i ? { ...r, ...patch } : r));
   }
@@ -49,23 +53,26 @@ function ResearchEditor() {
         <button onClick={addNew} className="font-pixel text-sm border-2 border-foreground px-3 py-1.5 hover:bg-foreground hover:text-background">+ NEW</button>
       </div>
 
-      <div className="space-y-4">
-        {rows.map((row, i) => (
-          <div key={row.id} className="border-2 border-foreground p-4 space-y-3">
+      <SortableList
+        table="research_directions"
+        items={rows}
+        onReorder={(next) => setRows(next.map((r, i) => ({ ...r, sort_order: i })))}
+        renderItem={(row) => (
+          <div className="border-2 border-foreground p-4 space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <div><label className={lab}>QUESTION (IT)</label><input className={inp} value={row.title_it} onChange={(e) => update(i, { title_it: e.target.value })} /></div>
-              <div><label className={lab}>QUESTION (EN)</label><input className={inp} value={row.title_en} onChange={(e) => update(i, { title_en: e.target.value })} /></div>
-              <div><label className={lab}>NOTE (IT)</label><textarea rows={3} className={inp} value={row.body_it} onChange={(e) => update(i, { body_it: e.target.value })} /></div>
-              <div><label className={lab}>NOTE (EN)</label><textarea rows={3} className={inp} value={row.body_en} onChange={(e) => update(i, { body_en: e.target.value })} /></div>
+              <div><label className={lab}>QUESTION (IT)</label><input className={inp} value={row.title_it} onChange={(e) => updateById(row.id, { title_it: e.target.value })} /></div>
+              <div><label className={lab}>QUESTION (EN)</label><input className={inp} value={row.title_en} onChange={(e) => updateById(row.id, { title_en: e.target.value })} /></div>
+              <div><label className={lab}>NOTE (IT)</label><textarea rows={3} className={inp} value={row.body_it} onChange={(e) => updateById(row.id, { body_it: e.target.value })} /></div>
+              <div><label className={lab}>NOTE (EN)</label><textarea rows={3} className={inp} value={row.body_en} onChange={(e) => updateById(row.id, { body_en: e.target.value })} /></div>
               <div className="col-span-2 flex items-center gap-4">
-                <label className="font-pixel text-xs">ORDER <input type="number" className={`${inp} w-20 inline-block`} value={row.sort_order} onChange={(e) => update(i, { sort_order: Number(e.target.value) })} /></label>
                 <button onClick={() => saveRow(row)} className="font-pixel text-xs border-2 border-foreground px-3 py-1.5 hover:bg-foreground hover:text-background">SAVE</button>
                 <button onClick={() => deleteRow(row)} className="font-pixel text-xs text-destructive hover:underline">DELETE</button>
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        )}
+      />
+
     </div>
   );
 }

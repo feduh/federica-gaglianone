@@ -37,6 +37,10 @@ const groups: Group[] = [
     ],
   },
   {
+    title: "Media",
+    items: [{ to: "/admin/media", label: "Libreria file", icon: "▨" }],
+  },
+  {
     title: "Testi UI",
     items: [{ to: "/admin/ui", label: "i18n strings", icon: "Aa" }],
   },

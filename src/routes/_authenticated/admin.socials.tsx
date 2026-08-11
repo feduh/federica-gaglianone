@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { upsertSocial, deleteSocial } from "@/lib/admin.functions";
 import type { SocialRow } from "@/lib/cms-types";
+import { SortableList } from "@/components/admin/SortableList";
 
 export const Route = createFileRoute("/_authenticated/admin/socials")({
   component: SocialsEditor,
@@ -23,6 +24,9 @@ function SocialsEditor() {
   }
   useEffect(() => { load(); }, []);
 
+  function updateById(id: string, patch: Partial<SocialRow>) {
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+  }
   function update(i: number, patch: Partial<SocialRow>) {
     setRows((rs) => rs.map((r, j) => j === i ? { ...r, ...patch } : r));
   }
@@ -55,20 +59,23 @@ function SocialsEditor() {
         Only rows marked <em>visible</em> AND with a non-empty URL appear in the footer.
       </p>
 
-      <div className="space-y-3">
-        {rows.map((row, i) => (
-          <div key={row.id} className="border-2 border-foreground p-3 grid grid-cols-12 gap-2 items-center">
-            <input className={`${inp} col-span-2`} value={row.label} onChange={(e) => update(i, { label: e.target.value })} placeholder="Label" />
-            <input className={`${inp} col-span-6`} value={row.href} onChange={(e) => update(i, { href: e.target.value })} placeholder="https://…" />
-            <input type="number" className={`${inp} col-span-1`} value={row.sort_order} onChange={(e) => update(i, { sort_order: Number(e.target.value) })} />
+      <SortableList
+        table="socials"
+        items={rows}
+        className="space-y-3"
+        onReorder={(next) => setRows(next.map((r, i) => ({ ...r, sort_order: i })))}
+        renderItem={(row) => (
+          <div className="border-2 border-foreground p-3 grid grid-cols-12 gap-2 items-center">
+            <input className={`${inp} col-span-3`} value={row.label} onChange={(e) => updateById(row.id, { label: e.target.value })} placeholder="Label" aria-label="Label" />
+            <input className={`${inp} col-span-6`} value={row.href} onChange={(e) => updateById(row.id, { href: e.target.value })} placeholder="https://…" aria-label="URL" />
             <label className="col-span-1 font-pixel text-xs flex items-center gap-1">
-              <input type="checkbox" checked={row.visible} onChange={(e) => update(i, { visible: e.target.checked })} /> ON
+              <input type="checkbox" checked={row.visible} onChange={(e) => updateById(row.id, { visible: e.target.checked })} /> ON
             </label>
             <button onClick={() => saveRow(row)} className="col-span-1 font-pixel text-xs border-2 border-foreground py-1 hover:bg-foreground hover:text-background">SAVE</button>
-            <button onClick={() => deleteRow(row)} className="col-span-1 font-pixel text-xs text-destructive hover:underline">DELETE</button>
+            <button onClick={() => deleteRow(row)} className="col-span-1 font-pixel text-xs text-destructive hover:underline">DEL</button>
           </div>
-        ))}
-      </div>
+        )}
+      />
     </div>
   );
 }

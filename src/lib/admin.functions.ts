@@ -258,8 +258,75 @@ export const uploadAsset = createServerFn({ method: "POST" })
       .from("public-assets")
       .upload(data.path, binary, { contentType: data.contentType, upsert: true });
     if (error) throw new Error(error.message);
-    const { data: pub } = context.supabase.storage.from("public-assets").getPublicUrl(data.path);
-    return { url: pub.publicUrl };
+    // Bucket is private (workspace policy blocks public buckets) — serve through
+    // the same-origin read-only proxy route instead of a Supabase public URL.
+    return { url: `/api/public/asset/${data.path.split("/").map(encodeURIComponent).join("/")}` };
+  });
+
+// ============== STORAGE: LIST / DELETE (media library) ==============
+export const listAssets = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: any) => (d ?? {}) as { prefix?: string })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const prefixes = ["projects-cover", "avatars", "publications", ""];
+    const wanted = data?.prefix ? [data.prefix] : prefixes;
+    const out: { path: string; name: string; size: number; updated_at: string | null; url: string }[] = [];
+    for (const pfx of wanted) {
+      const { data: files, error } = await context.supabase.storage
+        .from("public-assets")
+        .list(pfx, { limit: 200, sortBy: { column: "updated_at", order: "desc" } });
+      if (error) continue;
+      for (const f of files ?? []) {
+        if (!f.id) continue; // folder placeholder
+        const path = pfx ? `${pfx}/${f.name}` : f.name;
+        out.push({
+          path,
+          name: f.name,
+          size: (f.metadata as any)?.size ?? 0,
+          updated_at: f.updated_at ?? null,
+          url: `/api/public/asset/${path.split("/").map(encodeURIComponent).join("/")}`,
+        });
+      }
+    }
+    return { files: out };
+  });
+
+export const deleteAsset = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: any) => d as { path: string })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    const { error } = await context.supabase.storage.from("public-assets").remove([data.path]);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// ============== GENERIC REORDER ==============
+const REORDERABLE = [
+  "timeline_entries",
+  "publications",
+  "projects",
+  "research_directions",
+  "socials",
+] as const;
+
+export const reorderRows = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: any) => d as { table: string; ids: string[] })
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase, context.userId);
+    if (!(REORDERABLE as readonly string[]).includes(data.table)) {
+      throw new Error("Table not reorderable");
+    }
+    for (let i = 0; i < data.ids.length; i++) {
+      const { error } = await context.supabase
+        .from(data.table as any)
+        .update({ sort_order: i })
+        .eq("id", data.ids[i]!);
+      if (error) throw new Error(error.message);
+    }
+    return { ok: true };
   });
 
 // ============== AUTH: CHECK ROLE ==============

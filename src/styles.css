@@ -138,3 +138,72 @@
     color: var(--color-accent-foreground);
   }
 }
+
+/* ============================================================
+   Accessibility & motion
+   ============================================================ */
+
+@layer base {
+  /* Visible keyboard focus — pixel language, always above the custom cursor */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
+
+  /* Keyboard users get the native caret back so focus is never lost */
+  body.has-custom-cursor.keyboard-nav,
+  body.has-custom-cursor.keyboard-nav * {
+    cursor: auto !important;
+  }
+
+  /* Skip link */
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 10000;
+    transform: translateY(-200%);
+    background: var(--color-accent);
+    color: var(--color-accent-foreground);
+    border: 2px solid var(--color-foreground);
+    padding: 0.6rem 1rem;
+    font-family: var(--font-pixel);
+    text-transform: uppercase;
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+/* Scroll reveal — progressive enhancement, visible by default if JS is off */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
