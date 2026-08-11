@@ -83,7 +83,7 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <TopBar />
-      <main>
+      <main id="main" tabIndex={-1}>
         <IntroAsymmetric />
         <Timeline />
         <Publications items={publications} tags={tags} />

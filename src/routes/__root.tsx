@@ -129,12 +129,21 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SkipLink() {
+  return (
+    <a href="#main" className="skip-link">
+      Skip to content
+    </a>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
+        <SkipLink />
         <CustomCursor />
         <Outlet />
       </LanguageProvider>

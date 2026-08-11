@@ -77,6 +77,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (typeof document !== "undefined") document.documentElement.lang = lang;
+  }, [lang]);
+
+  useEffect(() => {
     // Load UI strings from DB (client-side, non-blocking) and merge over defaults
     supabase.from("ui_strings").select("key, value_it, value_en").then(({ data }) => {
       if (!data) return;

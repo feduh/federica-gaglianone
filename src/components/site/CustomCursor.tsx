@@ -10,7 +10,8 @@ export function CustomCursor() {
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!fine) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine || reduced) return;
     setEnabled(true);
     document.body.classList.add("has-custom-cursor");
 
@@ -40,13 +41,24 @@ export function CustomCursor() {
     };
     raf = requestAnimationFrame(tick);
 
+    // Keyboard users get the native caret back so focus is never hidden.
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Tab") document.body.classList.add("keyboard-nav");
+    };
+    const onPointerDown = () => document.body.classList.remove("keyboard-nav");
+
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseover", onOver);
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("pointerdown", onPointerDown);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("pointerdown", onPointerDown);
       document.body.classList.remove("has-custom-cursor");
+      document.body.classList.remove("keyboard-nav");
     };
   }, []);
 
