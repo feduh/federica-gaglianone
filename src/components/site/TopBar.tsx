@@ -22,6 +22,7 @@ export function TopBar() {
         <div className="flex justify-start">
           <a
             href="#intro"
+            onClick={anchorClick("intro")}
             data-cursor="link"
             className="pointer-events-auto font-pixel text-sm leading-none border-2 border-foreground bg-background px-2 py-2 min-h-11 inline-flex items-center"
           >
@@ -38,6 +39,7 @@ export function TopBar() {
               <a
                 data-cursor="link"
                 href={`#${l.id}`}
+                onClick={anchorClick(l.id)}
                 aria-current={active === l.id ? "true" : undefined}
                 className={`px-1 hover:text-accent transition-colors ${
                   active === l.id ? "text-accent underline underline-offset-4" : ""
