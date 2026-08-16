@@ -180,6 +180,13 @@
   }
 }
 
+/* Anchor targets clear the fixed top bar */
+section[id],
+footer[id],
+main[id] {
+  scroll-margin-top: 6rem;
+}
+
 /* Scroll reveal — progressive enhancement, visible by default if JS is off */
 .reveal {
   opacity: 0;
