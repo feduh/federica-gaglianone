@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLang } from "@/lib/i18n";
+import { scrollToId } from "@/lib/scrollToId";
 import type { Project, Publication } from "@/lib/portfolio-types";
 
 type Item = {
@@ -85,11 +86,7 @@ export function CommandPalette({
   const go = (item: Item | undefined) => {
     if (!item) return;
     setOpen(false);
-    const el = document.querySelector(item.href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      (el as HTMLElement).focus?.();
-    }
+    requestAnimationFrame(() => scrollToId(item.href));
   };
 
   if (!open) return null;
