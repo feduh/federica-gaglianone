@@ -130,7 +130,7 @@ export function Projects({
             role="region"
             aria-label={lang === "en" ? "Projects carousel" : "Carosello progetti"}
             onKeyDown={onKeyDown}
-            className="overflow-hidden outline-none"
+            className="overflow-hidden outline-none -m-2 p-2"
           >
             <div className="flex items-start gap-4">
               {filtered.map((p, idx) => {
