@@ -2,6 +2,7 @@ import { LanguageToggle } from "./LanguageToggle";
 import { ScrollProgress } from "./ScrollProgress";
 import { useLang } from "@/lib/i18n";
 import { useScrollSpy } from "@/lib/useScrollSpy";
+import { anchorClick } from "@/lib/scrollToId";
 
 const LINKS = [
   { id: "timeline", key: "navTimeline" },
