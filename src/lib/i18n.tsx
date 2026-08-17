@@ -96,7 +96,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, l);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(STORAGE_KEY, l);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
     if (typeof document !== "undefined") document.documentElement.lang = l;
   };
 
