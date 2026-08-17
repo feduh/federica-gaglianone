@@ -68,3 +68,26 @@ export const getProjects = createServerFn({ method: "GET" }).handler(
     })) as Project[];
   },
 );
+
+export const getProject = createServerFn({ method: "GET" })
+  .inputValidator((input: { id: string }) => ({ id: String(input.id) }))
+  .handler(async ({ data }) => {
+    const supabase = serverClient();
+    const { data: row, error } = await supabase
+      .from("projects")
+      .select(
+        "id, year, cover_url, link_url, title_en, title_it, summary_en, summary_it, body_en, body_it, sort_order, project_tags(tag:tags(id, slug, label_en, label_it))",
+      )
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) {
+      console.error("[getProject]", error);
+      throw new Error("Failed to load data. Please try again later.");
+    }
+    if (!row) return null;
+    const r = row as any;
+    return {
+      ...r,
+      tags: (r.project_tags ?? []).map((pt: any) => pt.tag).filter(Boolean),
+    } as Project;
+  });
