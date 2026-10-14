@@ -13,7 +13,7 @@ type Dict = Record<string, { en: string; it: string }>;
 
 const dict = {
   available: { en: "Available for research", it: "Disponibile per la ricerca" },
-  basedIn: { en: "Based in Turin, IT", it: "Con base a Torino, IT" },
+  basedIn: { en: "Based in Newcastle, UK", it: "Con base a Newcastle, UK" },
   role: { en: "Aspiring researcher", it: "Aspirante ricercatrice" },
   navIntro: { en: "Intro", it: "Intro" },
   navTimeline: { en: "Timeline", it: "Percorso" },
