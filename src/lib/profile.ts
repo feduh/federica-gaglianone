@@ -5,8 +5,8 @@ export const profile = {
   name: "Federica Gaglianone",
   role_en: "Aspiring Researcher",
   role_it: "Aspirante Ricercatrice",
-  city_en: "Turin, Italy",
-  city_it: "Torino, Italia",
+  city_en: "Newcastle, UK",
+  city_it: "Newcastle, Regno Unito",
   email: "federica.gaglianone@proton.me",
   // Opening manifesto — the narrative hook at the top of the page.
   statement_en:
@@ -47,13 +47,13 @@ export const profile = {
   // Three narrative movements: origin → transition → direction.
   bio_en: [
     "I was trained as an artist. Five years of art high school, then a BA in New Technologies of Art at Accademia Albertina di Torino, where I learned to look slowly — at bodies, at cities, at the surfaces of things — and to treat that looking as a form of research.",
-    "Somewhere along the way the medium shifted. I started writing code the way I used to draw: as a way of thinking. Today I am re-training as a computer scientist through standalone courses at Politecnico di Torino and Università del Piemonte Orientale, and returning to the Albertina as a guest lecturer to teach students how to build with language models.",
-    "In September I move to Newcastle for an MSc in Data Science and AI. I want to bring satellite data, environmental sensing and interactive installations into the same conversation — treating orbital imagery as both evidence and medium, and asking what critical data science can look like inside a cultural institution.",
+    "Somewhere along the way the medium shifted. I started writing code the way I used to draw: as a way of thinking. I then re-trained as a computer scientist through standalone courses at Politecnico di Torino and Università del Piemonte Orientale, and returned to the Albertina as a guest lecturer to teach students how to build with language models.",
+    "I am now in Newcastle for an MSc in Data Science and AI. I want to bring satellite data, environmental sensing and interactive installations into the same conversation — treating orbital imagery as both evidence and medium, and asking what critical data science can look like inside a cultural institution.",
   ],
   bio_it: [
     "Mi sono formata come artista. Cinque anni di liceo artistico e poi una triennale in Nuove Tecnologie dell'Arte all'Accademia Albertina di Torino, dove ho imparato a guardare lentamente — corpi, città, superfici — e a considerare quello sguardo una forma di ricerca.",
-    "A un certo punto il medium è cambiato. Ho iniziato a scrivere codice come prima disegnavo: per pensare. Oggi mi sto riformando come informatica con corsi singoli al Politecnico di Torino e all'Università del Piemonte Orientale, e sono tornata all'Albertina come docente ospite per insegnare a costruire con i modelli linguistici.",
-    "A settembre mi trasferisco a Newcastle per una magistrale in Data Science e AI. Voglio far dialogare dati satellitari, telerilevamento ambientale e installazioni interattive — trattare le immagini orbitali come evidenza e come medium, e chiedermi che forma può avere una data science critica dentro un'istituzione culturale.",
+    "A un certo punto il medium è cambiato. Ho iniziato a scrivere codice come prima disegnavo: per pensare. Mi sono poi riformata come informatica con corsi singoli al Politecnico di Torino e all'Università del Piemonte Orientale, e sono tornata all'Albertina come docente ospite per insegnare a costruire con i modelli linguistici.",
+    "Ora sono a Newcastle per una magistrale in Data Science e AI. Voglio far dialogare dati satellitari, telerilevamento ambientale e installazioni interattive — trattare le immagini orbitali come evidenza e come medium, e chiedermi che forma può avere una data science critica dentro un'istituzione culturale.",
   ],
   // Open research questions — the "what comes next" section.
   researchDirections: [
@@ -149,9 +149,9 @@ export const timeline = [
     caption_en: "Machine learning, with a cultural lens.",
     caption_it: "Machine learning, con uno sguardo culturale.",
     body_en:
-      "Incoming MSc student. Focus on machine learning, statistical inference, and explainability — with a lens on cultural and creative applications.",
+      "First-year MSc student. Focus on machine learning, statistical inference, and explainability — with a lens on cultural and creative applications.",
     body_it:
-      "Studentessa in ingresso della magistrale. Focus su machine learning, inferenza statistica ed explainability, con uno sguardo sulle applicazioni culturali e creative.",
+      "Studentessa al primo anno della magistrale. Focus su machine learning, inferenza statistica ed explainability, con uno sguardo sulle applicazioni culturali e creative.",
   },
   {
     year: "2027-?",
