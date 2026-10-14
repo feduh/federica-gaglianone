@@ -7,6 +7,7 @@ import { IntroAsymmetric } from "@/components/site/IntroAsymmetric";
 import { Timeline } from "@/components/site/Timeline";
 import { Publications } from "@/components/site/Publications";
 import { Projects } from "@/components/site/Projects";
+import { Teaching } from "@/components/site/Teaching";
 import { ResearchDirections } from "@/components/site/ResearchDirections";
 import { Footer } from "@/components/site/Footer";
 import { CommandPalette } from "@/components/site/CommandPalette";
@@ -39,6 +40,8 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: `${profile.name} — ${profile.role_en}` },
       { name: "twitter:description", content: profile.statement_en },
+      { property: "og:image", content: "https://federica-gaglianone.lovable.app/og-cover.jpg" },
+      { name: "twitter:image", content: "https://federica-gaglianone.lovable.app/og-cover.jpg" },
     ],
     links: [
       { rel: "canonical", href: "https://federica-gaglianone.lovable.app/" },
@@ -120,6 +123,7 @@ function HomePage() {
           activeTags={parseTags(search.p)}
           onTagsChange={(s) => setParam("p", s)}
         />
+        <Teaching />
         <ResearchDirections />
       </main>
       <Footer />

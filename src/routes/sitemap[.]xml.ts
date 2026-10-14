@@ -16,7 +16,19 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/cv", changefreq: "monthly", priority: "0.8" },
         ];
+        try {
+          const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/projects?select=id`, {
+            headers: { apikey: process.env.SUPABASE_PUBLISHABLE_KEY! },
+          });
+          if (res.ok) {
+            const rows = (await res.json()) as { id: string }[];
+            rows.forEach((r) => entries.push({ path: `/projects/${r.id}`, changefreq: "monthly", priority: "0.7" }));
+          }
+        } catch (e) {
+          console.error("[sitemap]", e);
+        }
 
         const urls = entries.map((e) =>
           [

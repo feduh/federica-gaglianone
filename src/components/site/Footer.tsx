@@ -76,6 +76,10 @@ export function Footer() {
             <span />
           )}
           <div className="flex flex-wrap items-center gap-3 font-pixel text-xs text-muted-foreground">
+            <a href="/cv" data-cursor="link" className="text-accent hover:text-foreground transition-colors">
+              ▸ {t("downloadCv")}
+            </a>
+            <span aria-hidden>·</span>
             <a href="/privacy" data-cursor="link" className="hover:text-foreground transition-colors">
               {t("navPrivacy")}
             </a>

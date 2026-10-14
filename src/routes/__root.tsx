@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ErrorComponentProps } from "@tanstack/react-router";
 import {
   Outlet,
   Link,
@@ -36,7 +37,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -91,13 +92,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Bilingual academic portfolio: timeline, publications, and projects in English and Italian.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Federica Gaglianone — Aspiring Researcher" },
       { name: "description", content: "Bilingual academic portfolio of Federica Gaglianone, aspiring researcher at the intersection of HCI, machine learning, and the philosophy of science." },
       { property: "og:description", content: "Bilingual academic portfolio of Federica Gaglianone, aspiring researcher at the intersection of HCI, machine learning, and the philosophy of science." },
       { name: "twitter:description", content: "Bilingual academic portfolio of Federica Gaglianone, aspiring researcher at the intersection of HCI, machine learning, and the philosophy of science." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/d248fd9a-86c8-4896-a0a6-e70364ddab22" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/d248fd9a-86c8-4896-a0a6-e70364ddab22" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

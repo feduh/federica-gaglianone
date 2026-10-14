@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { Link } from "@tanstack/react-router";
 import { useLang } from "@/lib/i18n";
 import type { Project, Tag } from "@/lib/portfolio-types";
 import { TagFilter } from "./TagFilter";
@@ -192,6 +193,14 @@ export function Projects({
                       >
                         {isOpen ? `− ${t("collapse")}` : `+ ${t("expand")}`}
                       </button>
+                      <Link
+                        to="/projects/$id"
+                        params={{ id: p.id }}
+                        data-cursor="link"
+                        className="font-pixel text-sm underline underline-offset-4 hover:text-accent min-h-11 inline-flex items-center"
+                      >
+                        {lang === "en" ? "Full page →" : "Pagina completa →"}
+                      </Link>
                       {p.link_url && (
                         <PixelButton href={p.link_url} target="_blank" rel="noreferrer">
                           {t("viewProject")}

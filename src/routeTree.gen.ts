@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as CvRouteImport } from './routes/cv'
 import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProjectsIdRouteImport } from './routes/projects.$id'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminUiRouteImport } from './routes/_authenticated/admin.ui'
@@ -43,6 +45,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CvRoute = CvRouteImport.update({
+  id: '/cv',
+  path: '/cv',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CookiesRoute = CookiesRouteImport.update({
   id: '/cookies',
   path: '/cookies',
@@ -60,6 +67,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIdRoute = ProjectsIdRouteImport.update({
+  id: '/projects/$id',
+  path: '/projects/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -128,10 +140,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/cv': typeof CvRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/projects/$id': typeof ProjectsIdRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/profile': typeof AuthenticatedAdminProfileRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
@@ -147,9 +161,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/cv': typeof CvRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/projects/$id': typeof ProjectsIdRoute
   '/admin/media': typeof AuthenticatedAdminMediaRoute
   '/admin/profile': typeof AuthenticatedAdminProfileRoute
   '/admin/projects': typeof AuthenticatedAdminProjectsRoute
@@ -167,10 +183,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/cookies': typeof CookiesRoute
+  '/cv': typeof CvRoute
   '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/projects/$id': typeof ProjectsIdRoute
   '/_authenticated/admin/media': typeof AuthenticatedAdminMediaRoute
   '/_authenticated/admin/profile': typeof AuthenticatedAdminProfileRoute
   '/_authenticated/admin/projects': typeof AuthenticatedAdminProjectsRoute
@@ -188,10 +206,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cookies'
+    | '/cv'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
     | '/admin'
+    | '/projects/$id'
     | '/admin/media'
     | '/admin/profile'
     | '/admin/projects'
@@ -207,9 +227,11 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cookies'
+    | '/cv'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
+    | '/projects/$id'
     | '/admin/media'
     | '/admin/profile'
     | '/admin/projects'
@@ -226,10 +248,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/cookies'
+    | '/cv'
     | '/privacy'
     | '/reset-password'
     | '/sitemap.xml'
     | '/_authenticated/admin'
+    | '/projects/$id'
     | '/_authenticated/admin/media'
     | '/_authenticated/admin/profile'
     | '/_authenticated/admin/projects'
@@ -247,9 +271,11 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CookiesRoute: typeof CookiesRoute
+  CvRoute: typeof CvRoute
   PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ProjectsIdRoute: typeof ProjectsIdRoute
   ApiPublicAssetSplatRoute: typeof ApiPublicAssetSplatRoute
 }
 
@@ -274,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cv': {
+      id: '/cv'
+      path: '/cv'
+      fullPath: '/cv'
+      preLoaderRoute: typeof CvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cookies': {
@@ -302,6 +335,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/$id': {
+      id: '/projects/$id'
+      path: '/projects/$id'
+      fullPath: '/projects/$id'
+      preLoaderRoute: typeof ProjectsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -427,9 +467,11 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CookiesRoute: CookiesRoute,
+  CvRoute: CvRoute,
   PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ProjectsIdRoute: ProjectsIdRoute,
   ApiPublicAssetSplatRoute: ApiPublicAssetSplatRoute,
 }
 export const routeTree = rootRouteImport
