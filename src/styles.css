@@ -214,3 +214,12 @@ main[id] {
     transform: none;
   }
 }
+
+@media print {
+  @page { margin: 16mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  .no-print, .skip-link, [data-custom-cursor] { display: none !important; }
+  * { cursor: auto !important; box-shadow: none !important; }
+  a { color: inherit !important; text-decoration: none !important; }
+  .cv-section { break-inside: avoid; }
+}

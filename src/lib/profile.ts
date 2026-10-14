@@ -28,6 +28,22 @@ export const profile = {
     { label: "ResearchGate", href: "https://www.researchgate.net/profile/REPLACE_ME" },
   ],
 
+  // Teaching experience.
+  teaching: [
+    {
+      id: "t-01",
+      period: "Feb 2026",
+      title_en: "Vibe Coding — Master's seminar",
+      title_it: "Vibe Coding — Seminario magistrale",
+      place_en: "Guest lecturer · Albertina Academy of Fine Arts, Turin",
+      place_it: "Docente ospite · Accademia Albertina di Belle Arti, Torino",
+      body_en:
+        "Guided Master's students in building working tools with large language models: conversational chatbots and a book-summarisation system for academic study. Artists, not engineers — so the focus was on prompting as design, and on reading model output critically.",
+      body_it:
+        "Ho guidato studenti magistrali nella costruzione di strumenti funzionanti con i modelli linguistici: chatbot conversazionali e un sistema di sintesi di libri per lo studio accademico. Artisti, non ingegneri — quindi il focus era sul prompting come progettazione e sulla lettura critica dell'output dei modelli.",
+    },
+  ],
+
   // Three narrative movements: origin → transition → direction.
   bio_en: [
     "I was trained as an artist. Five years of art high school, then a BA in New Technologies of Art at Accademia Albertina di Torino, where I learned to look slowly — at bodies, at cities, at the surfaces of things — and to treat that looking as a form of research.",
